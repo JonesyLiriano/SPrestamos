@@ -1,0 +1,19 @@
+ion-content.background {
+    --background: url(../../../assets/img/bg-register.jpg) 0 0/100% 100% no-repeat;
+  }
+  ion-item:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  ion-item:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  
+  .item-native {
+    background: transparent;
+  }
+  
+  .custom-margin-left-1 {
+    margin-left: -24px;
+  }

@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -24,3 +24,30 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.h-100 {
+  height: 100% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.img-50 {
+  width: 100px !important;
+  height: 100px !important;
+  display: initial !important;
+}
+
+.bg-white-transp{
+  background: rgba(255,255,255,0.5);
+}
+.img-icon {
+  width: 25px;
+  height: 25px;
+  margin-top: 20px;
+}
+
+.font-size-11 {
+  font-size: 11px;
+}

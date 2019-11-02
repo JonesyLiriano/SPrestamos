@@ -1,0 +1,107 @@
+<ion-content class="background">
+  <ion-grid class="h-100">
+    <ion-row class="ion-justify-content-center ion-padding h-100">
+      <ion-col class="ion-align-self-center" size-xl="6" size-md="6" size-lg="6" size-xs="12">
+        <ion-card class="bg-white-transp">
+          <ion-card-header>
+            <ion-card-title>
+              <div class="ion-text-center">
+                <img class="img-50" src="./../../../assets/img/register.png" />
+                <h3>Registro</h3>
+              </div>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="ion-padding">
+              <ion-slides class="ion-padding-bottom w-100" [options]="slideOpts" #slides
+                (ionSlideWillChange)="doCheck()">
+                <ion-slide>
+                  <form [formGroup]="basicInfoForm" #formDirective="ngForm">
+                    <ion-item>
+                      <ion-label position="floating">Nombre</ion-label>
+                      <ion-input formControlName="name" type="text" clearInput required autocapitalize="on">
+                      </ion-input>
+                      <ion-icon class="img-icon" name="person" slot="start"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="floating">Apellido</ion-label>
+                      <ion-input formControlName="lastName" type="text" clearInput required autocapitalize="on">
+                      </ion-input>
+                      <ion-icon class="img-icon" name="person" slot="start"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="floating">Pais</ion-label>
+                      <ion-input formControlName="country" type="text" clearInput required autocapitalize="on">
+                      </ion-input>
+                      <ion-img class="img-icon" src="./../../../assets/icon/country_icon.png" slot="start"></ion-img>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="floating">Ciudad</ion-label>
+                      <ion-input formControlName="state" type="text" clearInput required autocapitalize="on">
+                      </ion-input>
+                      <ion-img class="img-icon" src="./../../../assets/icon/state-icon.png" slot="start"></ion-img>
+                    </ion-item>
+                  </form>
+                </ion-slide>
+                <ion-slide>
+                  <form [formGroup]="accountInfoForm" #formDirective="ngForm">
+                    <ion-item>
+                      <ion-label position="floating">Email</ion-label>
+                      <ion-input (ionChange)="refreshEmailValidator()" formControlName="email" type="email" clearInput required autocapitalize="on">
+                      </ion-input>
+                      <ion-icon class="img-icon" name="mail" slot="start"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="floating">Confirmar Email</ion-label>                      
+                      <ion-input formControlName="confirmEmail" type="email" clearInput required autocapitalize="on">
+                      </ion-input>
+                      <ion-img class="img-icon" src="./../../../assets/icon/confirm_email.png" slot="start"></ion-img>
+                      <ion-text class="font-size-11" *ngIf="(confirmEmail.dirty || confirmEmail.touched) && confirmEmail.invalid
+                      && !confirmEmail.errors.EmailValidator" color="danger">Email no coincide</ion-text>
+                    </ion-item>
+                    <ion-item style="max-width: 100%;">
+                      <ion-label position="floating">Password</ion-label>                     
+                      <ion-input (ionChange)="refreshPasswordValidator()" formControlName="password" [type]="showPassword? 'text' : 'password'" clearInput
+                        required>
+                      </ion-input>
+                      <ion-icon class="img-icon" name="lock" slot="start"></ion-icon>
+                      <ion-icon class="custom-margin-left-1" *ngIf="password.value"
+                        [name]="showPassword? 'eye-off' : 'eye'" slot="end" (click)="showPassword = !showPassword">
+                      </ion-icon>
+                    </ion-item>
+                    <ion-item class="w-100">
+                      <ion-label position="floating">Confirmar Password</ion-label>                      
+                      <ion-input formControlName="confirmPassword" [type]="showConfiPassword? 'text' : 'password'"
+                        clearInput required></ion-input>
+                      <ion-img class="img-icon" src="./../../../assets/icon/confirm_password.png" slot="start">
+                      </ion-img>
+                      <ion-icon class="custom-margin-left-1" *ngIf="confirmPassword.value"
+                        [name]="showConfiPassword? 'eye-off' : 'eye'" slot="end"
+                        (click)="showConfiPassword = !showConfiPassword"></ion-icon>
+                        <ion-text class="font-size-11" *ngIf="(confirmPassword.dirty || confirmPassword.touched) && confirmPassword.invalid
+                      && !confirmPassword.errors.PasswordValidator" color="danger">Password no coincide</ion-text>
+                    </ion-item>
+                  </form>
+                </ion-slide>
+              </ion-slides>
+            </div>
+            <div class="ion-padding">
+              <ion-button size="large" type="button" *ngIf="!disablePrevBtn"
+                [disabled]="!basicInfoForm.valid || !accountInfoForm.valid" expand="block" color="tertiary"
+                (click)="onSubmit()">
+                Aceptar <ion-icon name="send" slot="end"></ion-icon>
+              </ion-button>
+              <ion-button size="large" type="button" *ngIf="!disablePrevBtn" expand="block" (click)="goBack()">Atras
+                <ion-icon name="send" slot="end"></ion-icon>
+              </ion-button>
+              <ion-button size="large" type="button" expand="block" *ngIf="!disableNextBtn"
+                [disabled]="!basicInfoForm.valid" (click)="goNext()">Siguiente <ion-icon name="send" slot="end">
+                </ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

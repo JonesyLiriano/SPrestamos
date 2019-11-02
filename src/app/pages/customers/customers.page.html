@@ -1,0 +1,32 @@
+<app-toolbar [title]="'Clientes'"></app-toolbar>
+<ion-content padding>
+  <ion-item>
+    <app-filter (filter)="onFilter($event)"></app-filter>    
+  </ion-item>
+  <div>
+    <ion-virtual-scroll [items]="customers | searchCustomers : search" approxItemHeight="320px">
+      <ion-item-sliding *virtualItem="let customer">
+        <ion-item>
+          <ion-icon name="contact" slot="start"></ion-icon>
+          {{ customer.id }}
+          <div class="item-note" slot="end">
+            {{ customer.name }}
+          </div>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="presentUpdateModal(customer)" color="primary">
+            <ion-icon slot="icon-only" [name]="userLevel == 'admin'? 'create' : 'eye'"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="deleteCustomer(customer)" color="danger" [disabled]="userLevel != 'admin'">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-virtual-scroll>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentAddModal()" color="tertiary" [disabled]="userLevel != 'admin'">
+      <ion-icon name="person-add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -1,1 +1,14 @@
 
+ion-fab {
+    bottom: 28px;  
+
+    ion-fab-button {
+        --box-shadow: none;
+        --border-color: #7044ff;
+        --border-width: 4px;
+        --border-style: solid;
+    }
+}
+.fab-icon {
+    width: 28px;
+}
