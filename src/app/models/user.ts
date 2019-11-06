@@ -8,4 +8,6 @@ export class User {
     email: string;
     registerDate: string;
     lastLoginDate: string;
+    uid: string;
+    emailVerified: boolean;
 }

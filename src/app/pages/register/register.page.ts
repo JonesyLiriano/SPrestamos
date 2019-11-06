@@ -97,12 +97,15 @@ export class RegisterPage implements OnInit {
     try {   
       if (this.accountInfoForm.valid && this.basicInfoForm.valid) {
         this.loadingService.presentLoading('Cargando...');
-        const user = await this.authService.registerUser(this.email.value, this.password.value);
-        this.populateDataUser();
+        const user = await this.authService.registerUser(this.email.value, this.password.value);        
+        this.populateDataUser(user.user.uid);
+        await this.authService.setUserAuthData({displayName: this.user.name + ' ' + this.user.lastName,
+                                                email: this.user.email});                                                
         const userCreated = await this.userService.createUser(user.user.uid, this.user);
-        console.log(userCreated);
         if(userCreated !== null || userCreated !== undefined) {
-          this.toast.presentSuccessToast('Se ha registrado correctamente!.');
+          this.toast.presentSuccessToast('Verifique su correo electronico para finalizar el registro!.');
+          await this.authService.sendVerificationMail();
+          this.router.navigate(['/verify-email-address']);
         } else {
           this.toast.presentErrorToast('Ha ocurrido un error, intente de nuevo por favor');
         }
@@ -112,11 +115,12 @@ export class RegisterPage implements OnInit {
         this.toast.presentDefaultToast('Verifique los campos nuevamente.');
       }
     } catch (e) {
-      console.log(e);
+      this.loadingService.dismissLoading();
+      this.toast.presentErrorToast(e);
     }
   }
 
-  populateDataUser() {
+  populateDataUser(uid: string) {
     this.user = {
       name: this.name.value,
       lastName: this.lastName.value,
@@ -126,7 +130,9 @@ export class RegisterPage implements OnInit {
       },
       email: this.email.value,
       registerDate: new Date().toDateString(),
-      lastLoginDate: new Date().toDateString()
+      lastLoginDate: new Date().toDateString(),
+      uid: uid,
+      emailVerified: false
     };
   }
 

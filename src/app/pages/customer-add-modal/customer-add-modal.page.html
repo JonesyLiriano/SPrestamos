@@ -1,54 +1,98 @@
-<ion-header translucent>
-  <ion-toolbar>
-    <ion-title>Agregar Cliente</ion-title>
+<app-toolbar [title]="'Agregar Cliente'">
     <ion-buttons slot="end">
-      <ion-button (click)="dismissModal()">Cerrar</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+    <ion-button (click)="dismissModal()">Cerrar</ion-button>
+  </ion-buttons>
+</app-toolbar>
 <ion-content>
-  <form #formCustomer="ngForm" (ngSubmit)="onClickSubmit()">
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
     <ion-grid>
-      <ion-row justify-content-center padding>
-        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-          <div text-center>
-            <h3>Favor completar los datos</h3>
-          </div>
-          <div padding>
-            <ion-item>
-
-              <ion-label position="floating">Nombre<ion-text color="danger">*</ion-text>
-              </ion-label>
-              <ion-input #name name="name" [type]="'text'" clearInput [ngModel]="customer.name"
-                (ngModelChange)="customer.name=$event" autocapitalize="on" required></ion-input>
-              <ion-icon name="contact" slot="start"></ion-icon>
-
-            </ion-item>
-            <ion-item>
-
-              <ion-label position="floating">Telefono <ion-text color="danger">*</ion-text>
-              </ion-label>
-              <ion-input #phone name="phone" [type]="'tel'" clearInput [(ngModel)]="customer.phone" required>
-              </ion-input>
-              <ion-icon name="call" slot="start"></ion-icon>
-            </ion-item>
-            <ion-item>
-
-              <ion-label position="floating">Direccion <ion-text color="danger">*</ion-text>
-              </ion-label>
-              <ion-input #address name="address" [type]="'text'" clearInput [ngModel]="customer.address"
-                (ngModelChange)="customer.address=$event" autocapitalize="on" required></ion-input>
-              <ion-icon name="map" slot="start"></ion-icon>
-            </ion-item>
-          </div>
-          <div padding>
-            <ion-button color="success" size="default" type="submit" [disabled]="formCustomer.invalid" expand="block">
-              Agregar <ion-icon name="add" slot="end"></ion-icon>
-            </ion-button>
-            <ion-button color="medium" fill="outline" size="default" expand="block" (click)="dismissModal()">Cancelar
-              <ion-icon name="close" slot="end"></ion-icon>
-            </ion-button>
-          </div>
+      <ion-row>
+        <ion-card color="light" class="ion-text-center w-100">
+          <ion-card-content class="font-size-17">
+            Datos Generales
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Nombre<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="name" type="text" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-card color="light" class="ion-text-center w-100">
+          <ion-card-content class="font-size-17">
+            Direccion
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Cedula<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="noDocument" type="text" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Ciudad<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="state" type="text" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Calle<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="street" type="text" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-card color="light" class="ion-text-center w-100">
+          <ion-card-content class="font-size-17">
+            Contactos
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Telefono<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="phone" type="tel" pattern="\d*" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Telefono #2<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="secondPhone" type="tel" pattern="\d*" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Email<ion-text color="danger" clearInput>*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="email" type="email" clearInput></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button size="large" expand="block" color="tertiary" type="submit" [disabled]="customerForm.invalid">
+            Agregar
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

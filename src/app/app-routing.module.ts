@@ -11,14 +11,19 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
-    path: 'customers',
-    loadChildren: () => import('./pages/customers/customers.module').then(m => m.CustomersPageModule)
-  },
-  {
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
+  {
+    path: 'verify-email-address',
+    loadChildren: () => import('./pages/verify-email-address/verify-email-address.module').then(m => m.VerifyEmailAddressPageModule)
+  },
+  {
+    path: 'forgot-password',
+    loadChildren: () => import('./pages/forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule)
+  },
   { path: '', pathMatch: 'full', redirectTo: 'login' }
+  
   
 ];
 @NgModule({

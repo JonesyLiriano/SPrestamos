@@ -15,20 +15,18 @@ export class CustomersPage implements OnInit {
   customer: Customer;
   customers: Customer[];
   search;
-  userLevel: string;
 
   constructor(private modalController: ModalController, private alertController: AlertController,
               private customerService: CustomersService, private storage: Storage) {}
 
   ngOnInit() {
     this.loadCustomers();
-    this.storage.get('level').then(data => {
-      this.userLevel = data;
-    });
   }
 
   loadCustomers() {
-    
+  this.customerService.getCustomers().subscribe(data => {
+    this.customers = data;
+  });
   }
 
   async deleteCustomer(customer: Customer) {
@@ -56,8 +54,7 @@ export class CustomersPage implements OnInit {
   async presentUpdateModal(customer: Customer) {
     const modal = await this.modalController.create({
     component: CustomerUpdateReadModalPage,
-    componentProps: { customer,
-                      userLevel: this.userLevel }
+    componentProps: { customer}
   });
 
     await modal.present();

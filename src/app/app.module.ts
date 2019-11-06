@@ -16,13 +16,15 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import {FileTransfer} from '@ionic-native/file-transfer/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,    
     IonicStorageModule.forRoot(),      
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
     AngularFireAuthModule
   ],
@@ -31,6 +33,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     SplashScreen,
     File,
     FileTransfer,
+    FirebaseX,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

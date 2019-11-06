@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FcmService } from '../services/fcm.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +8,13 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() {}
+  constructor(private fcmService: FcmService) {
+    this.fcmService.getToken();
+      this.fcmService.listenToNotifications().subscribe((data) => {
+        alert(data);
+      });
+  }
+
+  
 
 }

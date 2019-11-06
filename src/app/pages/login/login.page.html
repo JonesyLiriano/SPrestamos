@@ -17,24 +17,27 @@
                 <ion-item>
                   <ion-label position="floating">Email</ion-label>
                   <ion-input formControlName="email" type="email" clearInput required autocapitalize="on"></ion-input>
-                  <ion-icon name="person" slot="start"></ion-icon>
+                  <ion-icon class="custom-margin-top-1" name="person" slot="start"></ion-icon>
                 </ion-item>
                 <ion-item>
                   <ion-label position="floating">Password</ion-label>
                   <ion-input formControlName="password" [type]="showPassword? 'text' : 'password'" clearInput required>
                   </ion-input>
-                  <ion-icon name="lock" slot="start"></ion-icon>
+                  <ion-icon class="custom-margin-top-1" name="lock" slot="start"></ion-icon>
                   <ion-icon *ngIf="password.value" [name]="showPassword? 'eye-off' : 'eye'" slot="end"
                     (click)="showPassword = !showPassword"></ion-icon>
                 </ion-item>
               </div>
-              <div class="ion-padding">
+              <div class="ion-padding ion-text-center">
                 <ion-button size="large" type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">
                   Acceder <ion-icon name="log-in" slot="end"></ion-icon>
                 </ion-button>
-                <ion-button size="large" type="button" expand="block" color="success" (click)="registerForm()">
+                <ion-button class="custom-margin-bot-1" size="large" type="button" expand="block" color="primary" (click)="registerForm()">
                   Registrarse <ion-icon name="mail" slot="end"></ion-icon>
                 </ion-button>
+                <a class="custom-text" [routerLink]="['/forgot-password']" size="large" expand="block">
+                  Olvidaste la contraseña?
+                </a>
               </div>
             </form>
           </ion-card-content>

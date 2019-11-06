@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "735024049966",
+    "firebase_url": "https://sprestamos-97877.firebaseio.com",
+    "project_id": "sprestamos-97877",
+    "storage_bucket": "sprestamos-97877.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735024049966:android:e9bd613c2b423d179394bf",
+        "android_client_info": {
+          "package_name": "com.SPrestamos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735024049966-ggvi7jgpni3k0fmrk4dar862h832ek7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHR1BB4CmS8rUXyVN_T8BMlLlaPshB0m8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735024049966-ggvi7jgpni3k0fmrk4dar862h832ek7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

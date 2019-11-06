@@ -8,11 +8,16 @@ import { IonicModule } from '@ionic/angular';
 import { CustomersPage } from './customers.page';
 import { SharedModule } from '../../shared/shared.module'
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CustomerUpdateReadModalPage } from '../customer-update-read-modal/customer-update-read-modal.page';
+import { CustomerAddModalPage } from '../customer-add-modal/customer-add-modal.page';
+import { CustomerUpdateReadModalPageModule } from '../customer-update-read-modal/customer-update-read-modal.module';
+import { CustomerAddModalPageModule } from '../customer-add-modal/customer-add-modal.module';
+import { SearchCustomersPipe } from 'src/app/pipes/search-customers.pipe';
+
 const routes: Routes = [
   {
     path: '',
-    component: CustomersPage,
-    canActivate: [AuthGuard]
+    component: CustomersPage
   }
 ];
 
@@ -22,8 +27,11 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),    
+    CustomerUpdateReadModalPageModule,
+    CustomerAddModalPageModule
   ],
-  declarations: [CustomersPage]
+  declarations: [CustomersPage, SearchCustomersPipe],
+  entryComponents: [CustomerUpdateReadModalPage, CustomerAddModalPage]
 })
 export class CustomersPageModule {}

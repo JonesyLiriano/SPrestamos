@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,5 @@ export class UsersService {
 
   createUser(uid: string, user: User) {
     this.usersCollection.doc(uid).set(user);
-  }
+  }  
 }

@@ -5,6 +5,7 @@ import { MenuController } from '@ionic/angular';
 import { Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
 import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { FcmService } from 'src/app/services/fcm.service';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,6 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.menuCtrl.enable(false);
     this.showPassword = false;
-    
   }
 
   async onClickSubmit(formDirective: FormGroupDirective) {
@@ -40,21 +40,21 @@ export class LoginPage implements OnInit {
       if (this.loginForm.valid) {
         this.loadingService.presentLoading('Cargando...');      
         const user = await this.authService.loginUser(this.email.value, this.password.value);
-        if (user) {
-          this.toast.presentSuccessToast('Ha sido logeado correctamente.');       
-        } {
-          this.toast.presentErrorToast('Usuario o contraseña incorrecta, intente de nuevo.');        
-        }
         this.loadingService.dismissLoading();  
         formDirective.resetForm();
         this.loginForm.reset();   
-      }
-        else {
+        if (user) {
+          if(user.user.emailVerified) {
+          this.router.navigate(['/tabs/customers']);    
+          } else {          
+            this.router.navigate(['verify-email-address']);   
+          }
+        }        
+      } else {
           this.toast.presentDefaultToast('Verifique los campos nuevamente.');
         }
     } catch(e) {
-        console.log(e);
-        this.toast.presentErrorToast('Ha ocurrido un error, intentelo de nuevo');
+        this.toast.presentErrorToast(e);
         this.loadingService.dismissLoading();
     }
   }
