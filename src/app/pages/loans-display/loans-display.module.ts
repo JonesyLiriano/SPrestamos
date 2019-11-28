@@ -7,6 +7,12 @@ import { IonicModule } from '@ionic/angular';
 
 import { LoansDisplayPage } from './loans-display.page';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { LoanReadModalPage } from '../loan-read-modal/loan-read-modal.page';
+import { LoanReadModalPageModule } from '../loan-read-modal/loan-read-modal.module';
+import { PaymentModalPageModule } from '../payment-modal/payment-modal.module';
+import { PaymentModalPage } from '../payment-modal/payment-modal.page';
+
 
 const routes: Routes = [
   {
@@ -21,8 +27,12 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule,
+    LoanReadModalPageModule,
+    PaymentModalPageModule
   ],
-  declarations: [LoansDisplayPage]
+  declarations: [LoansDisplayPage],
+  entryComponents: [LoanReadModalPage, PaymentModalPage] 
 })
 export class LoansDisplayPageModule {}

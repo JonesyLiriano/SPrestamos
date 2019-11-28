@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { MenuController, IonSlides } from '@ionic/angular';
@@ -68,7 +68,7 @@ export class RegisterPage implements OnInit {
 
   constructor(private authService: AuthService, private router: Router,
     public menuCtrl: MenuController, private loadingService: LoadingService,
-    private fb: FormBuilder, private toast: ToastService, private userService: UsersService) { 
+    private fb: FormBuilder, private toast: ToastService, private usersService: UsersService) { 
       
     }
 
@@ -96,20 +96,20 @@ export class RegisterPage implements OnInit {
   async onSubmit() { 
     try {   
       if (this.accountInfoForm.valid && this.basicInfoForm.valid) {
-        this.loadingService.presentLoading('Cargando...');
+        await this.loadingService.presentLoading('Cargando...');
         const user = await this.authService.registerUser(this.email.value, this.password.value);        
-        this.populateDataUser(user.user.uid);
+        this.setDataUser();
         await this.authService.setUserAuthData({displayName: this.user.name + ' ' + this.user.lastName,
                                                 email: this.user.email});                                                
-        const userCreated = await this.userService.createUser(user.user.uid, this.user);
+        const userCreated = await this.usersService.createUser(user.user.uid, this.user);
+        this.loadingService.dismissLoading();
         if(userCreated !== null || userCreated !== undefined) {
           this.toast.presentSuccessToast('Verifique su correo electronico para finalizar el registro!.');
           await this.authService.sendVerificationMail();
           this.router.navigate(['/verify-email-address']);
         } else {
           this.toast.presentErrorToast('Ha ocurrido un error, intente de nuevo por favor');
-        }
-          this.loadingService.dismissLoading();
+        }         
         }     
       else {
         this.toast.presentDefaultToast('Verifique los campos nuevamente.');
@@ -120,7 +120,7 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  populateDataUser(uid: string) {
+  setDataUser() {
     this.user = {
       name: this.name.value,
       lastName: this.lastName.value,
@@ -131,7 +131,6 @@ export class RegisterPage implements OnInit {
       email: this.email.value,
       registerDate: new Date().toDateString(),
       lastLoginDate: new Date().toDateString(),
-      uid: uid,
       emailVerified: false
     };
   }

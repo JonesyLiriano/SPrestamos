@@ -1,14 +1,14 @@
 export class Customer {
-    id?: string;
+    idDoc?: string;
     name: string;
-    noDocument: string;
-    address: {
+    noDocument?: string;
+    address?: {
         state: string,
         street: string
     };
-    phone: string;
-    secondPhone: string;
-    email: string;
+    phone?: string;
+    secondPhone?: string;
+    email?: string;
     uid: string;
 
 

@@ -1,4 +1,5 @@
-export class User {    
+export class User {
+    idDoc?: string;    
     name: string;
     lastName: string;
     address: {
@@ -7,7 +8,6 @@ export class User {
     }
     email: string;
     registerDate: string;
-    lastLoginDate: string;
-    uid: string;
+    lastLoginDate: string;    
     emailVerified: boolean;
 }

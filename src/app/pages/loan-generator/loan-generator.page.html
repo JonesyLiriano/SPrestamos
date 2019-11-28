@@ -6,71 +6,69 @@
         <ion-item class="w-100">
           <ion-icon slot="start" name="person"></ion-icon>
           <ion-label>Cliente</ion-label>
-          <ion-select name="customer" placeholder="Cliente" required>
-            <ion-select-option>
+          <ion-select name="customer" placeholder="Cliente" formControlName="customer" required>
+            <ion-select-option *ngFor="let customer of customers" [value]="customer">
+              {{customer.name}}
             </ion-select-option>
           </ion-select>
         </ion-item>
-      </ion-row>      
+      </ion-row>
       <ion-row>
         <ion-card class="w-100">
           <ion-card-content>
             <ion-row>
-            <ion-col size="7">
-              <ion-item>
-                <ion-label position="floating">Monto $<ion-text color="danger">*</ion-text>
-                </ion-label>
-                <ion-input required formControlName="name" type="text" clearInput></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size="5">
-              <ion-item class="w-100">
-                <ion-label position="floating">% Interes<ion-text color="danger">*</ion-text>
-                </ion-label>
-                <ion-input required formControlName="noDocument" type="text" clearInput></ion-input>
-              </ion-item>
-            </ion-col>
-          </ion-row>
+              <ion-col size="7">
+                <ion-item>
+                  <ion-label position="floating">Monto $<ion-text color="danger">*</ion-text>
+                  </ion-label>
+                  <ion-input required formControlName="loanAmount" type="text" clearInput></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="5">
+                <ion-item class="w-100">
+                  <ion-label position="floating">%Interes<ion-text color="danger">*</ion-text>
+                  </ion-label>
+                  <ion-input required formControlName="interestRate" type="text" clearInput></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
           </ion-card-content>
         </ion-card>
       </ion-row>
       <ion-row>
-          <ion-item class="w-100">
-              <ion-label>Inicio Prestamo</ion-label>
-              <ion-icon name="calendar" slot="start"></ion-icon>
-              <ion-datetime value="1995-04-15" min="1990-02"
-                [dayShortNames]="customDayShortNames"
-                displayFormat="DDD. MMM DD, YY"
-                monthShortNames="jan, feb, mar, apr, mai, jun, jul, aug, sep, okt, nov, des"></ion-datetime>
-            </ion-item>
+        <ion-item class="w-100">
+          <ion-label>Inicio Prestamo</ion-label>
+          <ion-icon name="calendar" slot="start"></ion-icon>
+          <ion-datetime formControlName="initialDate" min="1990-01-01" [max]="loanTerm.value" displayFormat="DDD. MMM DD, YY" required>
+          </ion-datetime>
+        </ion-item>
       </ion-row>
       <ion-row>
-      <ion-card class="w-100">
-        <ion-card-content>
-          <ion-row>
-          <ion-col>
-              <ion-item class="w-100">
-                  <ion-label>Terminos</ion-label>
-                  <ion-select name="loanTerms" placeholder="Terminos" required>
-                    <ion-select-option>
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-              <ion-item class="w-100">
+        <ion-item class="w-100">
+          <ion-label>Final Prestamo</ion-label>
+          <ion-icon name="calendar" slot="start"></ion-icon>
+          <ion-datetime formControlName="loanTerm" [min]="initialDate.value" [max]="maxDate" displayFormat="DDD. MMM DD, YY" required>
+            
+          </ion-datetime>
+        </ion-item>
+      </ion-row>
+      <ion-row>
+        <ion-card class="w-100">
+          <ion-card-content>
+            <ion-row>
+              <ion-col>
+                <ion-item class="w-100">
                   <ion-label>Pagos</ion-label>
-                  <ion-select name="payBack" placeholder="Pagos" required>
-                    <ion-select-option>
+                  <ion-select name="payBack" formControlName="payBack" placeholder="Pagos" required>
+                    <ion-select-option *ngFor="let payback of payBacks" [value]="payback">
+                      {{payback}}
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
-          </ion-col>
-        </ion-row>
-        </ion-card-content>
-      </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
       </ion-row>
       <ion-row>
         <ion-col>

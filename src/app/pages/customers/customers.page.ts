@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { CustomerUpdateReadModalPage } from '../customer-update-read-modal/customer-update-read-modal.page';
 import { Customer } from 'src/app/models/customer';
 import { CustomersService } from 'src/app/services/customers.service';
 import { CustomerAddModalPage } from '../customer-add-modal/customer-add-modal.page';
 import { Storage } from '@ionic/storage';
+import { LoadingService } from 'src/app/services/loading.service';
+import { delay } from 'q';
 
 @Component({
   selector: 'app-customers',
@@ -12,20 +14,28 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./customers.page.scss'],
 })
 export class CustomersPage implements OnInit {
+  
   customer: Customer;
   customers: Customer[];
   search;
 
   constructor(private modalController: ModalController, private alertController: AlertController,
-              private customerService: CustomersService, private storage: Storage) {}
+              private customersService: CustomersService, private storage: Storage,
+              private loadingService: LoadingService) {}
 
   ngOnInit() {
     this.loadCustomers();
   }
 
-  loadCustomers() {
-  this.customerService.getCustomers().subscribe(data => {
-    this.customers = data;
+
+  async loadCustomers() {
+  await this.loadingService.presentLoading('Cargando...');
+  await delay(300); 
+  this.customersService.getCustomers().subscribe(customers => {
+    this.customers = customers;
+    this.loadingService.dismissLoading();
+  }, err => {
+    this.loadingService.dismissLoading();
   });
   }
 
@@ -40,9 +50,10 @@ export class CustomersPage implements OnInit {
           cssClass: 'secondary'
         }, {
           text: 'Eliminar',
-          handler: () => {
-            this.customerService.deleteCustomer(customer);
-            this.loadCustomers();
+          handler: async () => {
+            await this.loadingService.presentLoading('Cargando...');
+            await this.customersService.deleteCustomer(customer);
+            this.loadingService.dismissLoading();
           }
         }
       ]
@@ -52,25 +63,20 @@ export class CustomersPage implements OnInit {
   }
 
   async presentUpdateModal(customer: Customer) {
+    await this.loadingService.presentLoading('Cargando...');
     const modal = await this.modalController.create({
     component: CustomerUpdateReadModalPage,
     componentProps: { customer}
   });
-
     await modal.present();
   }
 
   async presentAddModal() {
+    await this.loadingService.presentLoading('Cargando...');
     const modal = await this.modalController.create({
     component: CustomerAddModalPage
   });
-
     await modal.present();
-    const refreshView = await modal.onDidDismiss();
-    if (refreshView) {
-      this.loadCustomers();
-    }
-
   }
 
   onFilter(search: string) {

@@ -1,12 +1,18 @@
 export class Loan {
-    id: string;
+    idDoc?: string;
     initialDate: string;
     customerId: string;
-    interestRate: string;
+    customer: string;
+    interestRate: number;
     loanAmount: number;
-    loanTerm: number;
+    loanTerm: string;
     payBack: string;
     logDate: string;
+    uid: string;
+    state: string;
+    overdue: boolean;
+
+
 
     constructor() {        
     }

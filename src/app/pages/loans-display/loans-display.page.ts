@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FcmService } from 'src/app/services/fcm.service';
+import { LoansService } from 'src/app/services/loans.service';
+import { Loan } from 'src/app/models/loan';
+import { LoanReadModalPage } from '../loan-read-modal/loan-read-modal.page';
+import { ModalController, AlertController } from '@ionic/angular';
+import { LoadingService } from 'src/app/services/loading.service';
+import { Storage } from '@ionic/storage';
+import { PaymentModalPage } from '../payment-modal/payment-modal.page';
+import { delay } from 'q';
 
 @Component({
   selector: 'app-loans-display',
@@ -8,10 +16,75 @@ import { FcmService } from 'src/app/services/fcm.service';
 })
 export class LoansDisplayPage implements OnInit {
 
-  constructor(private fmc: FcmService) { }
+   
+  loan: Loan;
+  loans: Loan[];
+  search;
+
+  constructor(private fmc: FcmService,
+              private modalController: ModalController, private alertController: AlertController,
+              private loansService: LoansService, private storage: Storage,
+              private loadingService: LoadingService) { }
 
   ngOnInit() {
     this.fmc.getToken();
   }
+ 
+   async loadLoans(event: any) {
+    await this.loadingService.presentLoading('Cargando...');
+    await delay(300);
+    this.loansService.getLoans(event.detail).subscribe(data => {
+     this.loans = data;
+     this.loadingService.dismissLoading();
+    }, err => {
+      this.loadingService.dismissLoading();
+    });
+   }
+ 
+   async cancelLoan(loan: Loan) {
+     const alert = await this.alertController.create({
+       header: 'Confirmacion!',
+       message: 'Esta seguro que desea <strong>cancelar</strong> este prestamo?',
+       buttons: [
+         {
+           text: 'Cancelar',
+           role: 'cancel',
+           cssClass: 'secondary'
+         }, {
+           text: 'Cancelar Prestamo',
+           handler: async () => {
+             await this.loadingService.presentLoading('Cargando...');
+             loan.state = 'cancelled';
+             await this.loansService.updateLoan(loan);
+             this.loadingService.dismissLoading();
+           }
+         }
+       ]
+     });
+ 
+     await alert.present();
+   }
+ 
+   async presentReadModal(loan: Loan) {
+     await this.loadingService.presentLoading('Cargando...');
+     const modal = await this.modalController.create({
+     component: LoanReadModalPage,
+     componentProps: {loan}
+   });
+     await modal.present();
+   }
+   
+   onFilter(search: string) {
+     this.search = search;
+ }
+
+ async presentPaymentModal(loan: Loan) {
+  await this.loadingService.presentLoading('Cargando...');
+  const modal = await this.modalController.create({
+  component: PaymentModalPage,
+  componentProps: {loan}
+});
+  await modal.present();
+}
 
 }

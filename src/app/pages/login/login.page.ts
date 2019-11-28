@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
   public showPassword: boolean;
   constructor(private authService: AuthService, private router: Router,
               public menuCtrl: MenuController, private fb: FormBuilder,
-              private loadingService: LoadingService, private toast: ToastService) {
+              private loadingService: LoadingService, private toastService: ToastService) {
   }
   ngOnInit() {
     this.menuCtrl.enable(false);
@@ -38,23 +38,23 @@ export class LoginPage implements OnInit {
   async onClickSubmit(formDirective: FormGroupDirective) {
     try {
       if (this.loginForm.valid) {
-        this.loadingService.presentLoading('Cargando...');      
+        await this.loadingService.presentLoading('Cargando...');      
         const user = await this.authService.loginUser(this.email.value, this.password.value);
         this.loadingService.dismissLoading();  
         formDirective.resetForm();
         this.loginForm.reset();   
         if (user) {
-          if(user.user.emailVerified) {
-          this.router.navigate(['/tabs/customers']);    
-          } else {          
+          if(user.user.emailVerified) {  
+            this.router.navigate(['/tabs/customers']);    
+          } else {         
             this.router.navigate(['verify-email-address']);   
           }
-        }        
+        }      
       } else {
-          this.toast.presentDefaultToast('Verifique los campos nuevamente.');
+          this.toastService.presentDefaultToast('Verifique los campos nuevamente.');
         }
     } catch(e) {
-        this.toast.presentErrorToast(e);
+        this.toastService.presentErrorToast(e);
         this.loadingService.dismissLoading();
     }
   }

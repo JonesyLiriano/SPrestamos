@@ -17,7 +17,8 @@ import { SearchCustomersPipe } from 'src/app/pipes/search-customers.pipe';
 const routes: Routes = [
   {
     path: '',
-    component: CustomersPage
+    component: CustomersPage,
+    canActivate: [AuthGuard]
   }
 ];
 

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -10,7 +11,7 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrls: ['./forgot-password.page.scss'],
 })
 export class ForgotPasswordPage implements OnInit {
-
+ 
   emailForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]]
   });
@@ -20,14 +21,16 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   constructor(private fb: FormBuilder, private authService: AuthService,
-              private router: Router, private toastService: ToastService) { }
+              private router: Router, private toastService: ToastService,
+              private loadingService: LoadingService) { }
 
   ngOnInit() {
   }
 
   async onSubmit() {
-    console.log(this.emailForm.value['email']);
+    await this.loadingService.presentLoading('Cargando...'); 
     await this.authService.forgotPassword(this.emailForm.value['email']);
+    this.loadingService.dismissLoading();
     this.toastService.presentSuccessToast('Se ha enviado el link para restablecer su password, verifique su bandeja de entrada.');
     this.router.navigate(['/login']);
 

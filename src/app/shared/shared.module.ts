@@ -3,22 +3,23 @@ import { CommonModule } from '@angular/common';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import {IonicModule} from '@ionic/angular';
 import {FilterComponent} from './components/filter/filter.component';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SearchLoansPipe } from '../pipes/search-loans.pipe';
 
 
 @NgModule({
-  declarations: [ToolbarComponent, FilterComponent],
+  declarations: [ToolbarComponent, FilterComponent, SearchLoansPipe],
   imports: [
     CommonModule,
-    IonicModule,
     FormsModule,
+    IonicModule,
     ReactiveFormsModule
   ],
   exports: [
     ToolbarComponent,
     FilterComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SearchLoansPipe
   ]
 })
 export class SharedModule { }

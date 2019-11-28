@@ -11,7 +11,7 @@ export class SearchCustomersPipe implements PipeTransform {
     }
     return items.filter(item =>
       item.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
-      item.id.toString().toLowerCase().indexOf(search.toLowerCase()) !== -1
+      item.noDocument.toString().toLowerCase().indexOf(search.toLowerCase()) !== -1
     );
   }
 

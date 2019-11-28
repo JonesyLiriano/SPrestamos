@@ -4,6 +4,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
+import { delay } from 'q';
 
 
 @Injectable({
@@ -11,42 +12,37 @@ import { map } from 'rxjs/operators'
 })
 export class CustomersService {
 
-  customersCollection: AngularFirestoreCollection<Customer> ;
-  customers$: Observable<Array<Customer>>;
-  uid: string;
-  constructor(private afs: AngularFirestore, authService: AuthService) {
-    this.uid = authService.userAuthData.uid;
-    this.customersCollection = this.afs.collection('customers', ref => ref.where('uid', '==', this.uid));
-    this.customers$ = this.customersCollection.snapshotChanges().pipe(
-      map(actions => actions.map( a => {
-        const data = a.payload.doc.data() as Customer;
-        const idDoc = a.payload.doc.id;
-        return {idDoc, ...data };
-      }))
-    ); 
+  customersCollection: AngularFirestoreCollection<Customer>;
+  constructor(private authService: AuthService, private afs: AngularFirestore) {
+    this.customersCollection = this.afs.collection<Customer>('customers');
   }
 
-  getCustomers() {    
-    return this.customers$;
+  getCustomers() {
+    return this.afs.collection<Customer>('customers', ref => ref.where(
+      'uid', '==', this.authService.userAuthData.uid)).snapshotChanges().pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as Customer;
+          const idDoc = a.payload.doc.id;
+          return { idDoc, ...data };
+        }))
+      );
   }
 
-  async createCustomer(customer: Customer) {    
-    var newCustomerRef = this.customersCollection.ref.doc();
-    customer.id = newCustomerRef.id   
-    return newCustomerRef.set(customer);
+  createCustomer(customer: Customer) {
+    return this.customersCollection.add(customer);
   }
-  
+
 
   updateCustomer(customer: Customer) {
-    return this.customersCollection.doc(customer.id).update(customer);
+    return this.customersCollection.doc(customer.idDoc).update(customer);
   }
 
   deleteCustomer(customer: Customer) {
-    return this.customersCollection.doc(customer.id).delete();
+    return this.customersCollection.doc(customer.idDoc).delete();
   }
 
-  getCustomer(id: string) {
-    return this.customersCollection.doc(id).get();
+  getCustomer(idDoc: string) {
+    return this.customersCollection.doc(idDoc).get();
   }
 
 }

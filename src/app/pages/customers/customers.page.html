@@ -1,10 +1,8 @@
 <app-toolbar [title]="'Clientes'"></app-toolbar>
 <ion-content padding>
-  <ion-item>
-    <app-filter (filter)="onFilter($event)"></app-filter>    
-  </ion-item>
+  <app-filter (filter)="onFilter($event)"></app-filter>
   <div>
-    <ion-virtual-scroll [items]="customers | searchCustomers : search" approxItemHeight="320px">
+    <ion-virtual-scroll [items]="customers" approxItemHeight="320px">
       <ion-item-sliding *virtualItem="let customer">
         <ion-item>
           <ion-icon name="contact" slot="start"></ion-icon>
@@ -15,10 +13,10 @@
         </ion-item>
         <ion-item-options side="end">
           <ion-item-option (click)="presentUpdateModal(customer)" color="primary">
-            <ion-icon slot="icon-only" [name]="create"></ion-icon>
+            <ion-icon slot="icon-only" name="create"></ion-icon>
           </ion-item-option>
           <ion-item-option (click)="deleteCustomer(customer)" color="danger">
-            <ion-icon name="trash"></ion-icon>
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
