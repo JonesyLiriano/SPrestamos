@@ -1,7 +1,10 @@
-export class LoanDetails {    
+export class LoanDetails { 
+    idDoc?: string;   
     logDate: string;
-    loanCapital: number;
-    loanInteres: number;
+    paid: boolean;
+    amount: number;
+    type: string;
+
 
     constructor() { }
 }

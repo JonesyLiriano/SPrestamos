@@ -7,17 +7,13 @@
 </ion-toolbar>
 </ion-header>
 <ion-content>
-    <form [formGroup]="loanForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loanForm">
         <ion-grid>
           <ion-row>
             <ion-item class="w-100">
               <ion-icon slot="start" name="person"></ion-icon>
-              <ion-label>Cliente</ion-label>
-              <ion-select name="customer" placeholder="Cliente" formControlName="customer" readonly="true">
-                <ion-select-option [value]="customerId">
-                  {{loan.customerId}}
-                </ion-select-option>
-              </ion-select>
+              <ion-label position="floating">Cliente</ion-label>
+              <ion-input formControlName="customer" type="text" readonly="true"></ion-input>
             </ion-item>
           </ion-row>
           <ion-row>
@@ -26,16 +22,34 @@
                 <ion-row>
                   <ion-col size="7">
                     <ion-item>
-                      <ion-label position="floating">Monto $<ion-text color="danger">*</ion-text>
-                      </ion-label>
+                      <ion-label position="floating">Monto $</ion-label>
                       <ion-input formControlName="loanAmount" type="text" readonly="true"></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="5">
                     <ion-item class="w-100">
-                      <ion-label position="floating">%Interes<ion-text color="danger">*</ion-text>
-                      </ion-label>
+                      <ion-label position="floating">%Interes</ion-label>
                       <ion-input formControlName="interestRate" type="text" readonly="true"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </ion-row>
+          <ion-row>
+            <ion-card class="w-100">
+              <ion-card-content>
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-item>
+                      <ion-label position="floating">Por Pagar $</ion-label>
+                      <ion-input formControlName="pendingAmountInput" type="text" readonly="true"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-item class="w-100">
+                      <ion-label position="floating">Cuotas Atrasadas</ion-label>
+                      <ion-input formControlName="overdues" type="text" readonly="true"></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -46,7 +60,7 @@
             <ion-item class="w-100">
               <ion-label>Inicio Prestamo</ion-label>
               <ion-icon name="calendar" slot="start"></ion-icon>
-              <ion-datetime formControlName="initialDate" min="1990-01-01" [max]="loanTerm.value" displayFormat="DDD. MMM DD, YY" readonly="true">
+              <ion-datetime formControlName="initialDate"  displayFormat="DDD. MMM DD, YY" readonly="true">
               </ion-datetime>
             </ion-item>
           </ion-row>
@@ -54,7 +68,15 @@
             <ion-item class="w-100">
               <ion-label>Final Prestamo</ion-label>
               <ion-icon name="calendar" slot="start"></ion-icon>
-              <ion-datetime formControlName="loanTerm" [min]="initialDate.value" [max]="maxDate" displayFormat="DDD. MMM DD, YY" readonly="true">
+              <ion-datetime formControlName="loanTerm"  displayFormat="DDD. MMM DD, YY" readonly="true">
+              </ion-datetime>
+            </ion-item>
+          </ion-row>
+          <ion-row>
+            <ion-item class="w-100">
+              <ion-label>Ultimo Pago</ion-label>
+              <ion-icon name="calendar" slot="start"></ion-icon>
+              <ion-datetime formControlName="lastPaymentDate" displayFormat="DDD. MMM DD, YY" readonly="true">
               </ion-datetime>
             </ion-item>
           </ion-row>
@@ -62,14 +84,16 @@
             <ion-card class="w-100">
               <ion-card-content>
                 <ion-row>
-                  <ion-col>
+                  <ion-col size="6">
                     <ion-item class="w-100">
-                      <ion-label>Pagos</ion-label>
-                      <ion-select name="payBack" formControlName="payBack" placeholder="Pagos" readonly="true">
-                        <ion-select-option [value]="loan.payBack">
-                          {{loan.payBack}}
-                        </ion-select-option>
-                      </ion-select>
+                      <ion-label position="floating">Cuota</ion-label>
+                      <ion-input formControlName="cuote" type="text" readonly="true"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-item class="w-100">
+                      <ion-label position="floating">Termino</ion-label>
+                      <ion-input formControlName="payBack" type="text" readonly="true"></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>

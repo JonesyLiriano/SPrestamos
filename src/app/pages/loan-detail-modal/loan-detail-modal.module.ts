@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { LoanDetailModalPage } from './loan-detail-modal.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import {PaidPaymentsPipe } from '../../pipes/paid-payments.pipe';
 
 @NgModule({
   imports: [
@@ -14,6 +15,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     SharedModule
   ],
-  declarations: [LoanDetailModalPage]
+  declarations: [LoanDetailModalPage, PaidPaymentsPipe]
 })
 export class LoanDetailModalPageModule {}

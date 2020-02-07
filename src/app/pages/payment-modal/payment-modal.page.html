@@ -10,44 +10,103 @@
 <ion-content>
   <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
     <ion-grid>
-      
-        <ion-list>
-          <ion-radio-group (ionChange)="paymentOption($event)">
-            <ion-list-header>Opciones de Pago</ion-list-header>
-            <ion-row>
+      <ion-row>
+        <ion-card color="primary" class="w-100">
+          <ion-card-content class="font-size-17">
+            <div class="ion-text-start">
+              {{loan.customer}}
+            </div>
+            <div class="ion-text-end">
+              ${{loan.loanAmount}}
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-card color="light" class="w-100">
+          <ion-card-content class="font-size-17">
+            <div class="ion-text-start">
+              <p>Capital pendiente</p>
+            </div>
+            <div class="ion-text-end">
+              ${{pendingAmount}}
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-card color="light" class="w-100">
+          <ion-card-content class="font-size-17">
+            <div class="ion-text-start">
+              <p>Cuotas pendiente</p>
+            </div>
+            <div class="ion-text-end">
+              {{overdues}}
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-list>
+        <ion-radio-group formControlName="paymentOptions" (ionChange)="paymentOption($event)">
+          <ion-list-header>Opciones de Pago</ion-list-header>
+          <ion-row>
             <ion-col size="6">
               <ion-item>
                 <ion-label>Cuota normal</ion-label>
-                <ion-radio value="normalCuote"></ion-radio>
+                <ion-radio value="Interes"></ion-radio>
               </ion-item>
             </ion-col>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label>Abono</ion-label>
-                  <ion-radio value="payment"></ion-radio>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-radio-group>
-        </ion-list>      
+            <ion-col size="6">
+              <ion-item>
+                <ion-label>Abono</ion-label>
+                <ion-radio value="Capital"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-list>
       <ion-row>
         <ion-card color="light" class="ion-text-center w-100">
           <ion-card-content class="font-size-17">
             Detalle del Pago
           </ion-card-content>
         </ion-card>
-      </ion-row>      
-      <ion-row>
+      </ion-row>
+      <ion-row *ngIf="paymentOptions.value == 'Interes'">
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Interes</ion-label>
+            <ion-input formControlName="loanInteres" type="number" readonly></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-row>            
+              <ion-col size="12">
+                <ion-label position="floating"><div class="ion-text-center">Cuotas a pagar</div></ion-label>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">                
+                <div class="ion-text-center font-size-30">
+                  <ion-icon name="add-circle" class="padding-right-5" (click)="addCuotes()"></ion-icon>
+                  {{cuotesToPay}}
+                  <ion-icon name="remove-circle" class="padding-left-5" (click)="substractCuotes()"></ion-icon>
+                </div>                
+              </ion-col>          
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="paymentOptions.value == 'Capital'">
         <ion-col>
           <ion-item>
             <ion-label position="floating">Monto</ion-label>
-            <ion-input [readonly]="normalCuote" formControlName="loanAmount" type="number" clearInput></ion-input>
+            <ion-input formControlName="loanAmount" type="number" clearInput></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-button size="large" expand="block" color="tertiary" type="submit" [disabled]="customerForm.invalid">
+          <ion-button size="large" expand="block" color="tertiary" type="submit" [disabled]="paymentForm.invalid">
             Realizar Pago
           </ion-button>
         </ion-col>

@@ -15,20 +15,17 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    var promise = new Promise((resolve) => {
-      this.firebaseAuth.authState.subscribe(res => {
-        if (res && res.uid) {
-          this.userAuthData = res;
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      });
+     this.firebaseAuth.authState.subscribe( user => {
+      if (user) {
+        console.log(user);
+        this.userAuthData = user; 
+      }
+      else {        
+       
+      }
     });
-    return promise;
   }
   setUserAuthData(userAuthData) {
-    console.log(userAuthData);
     return this.firebaseAuth.auth.currentUser.updateProfile(userAuthData);
   }
 
@@ -40,23 +37,16 @@ export class AuthService {
     return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  async sendVerificationMail() {
-    return await this.firebaseAuth.auth.currentUser.sendEmailVerification();
+  sendVerificationMail() {
+    return this.firebaseAuth.auth.currentUser.sendEmailVerification();
   }
 
   signOut() {
-    return this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.removeItem('user');
-    });
+    return this.firebaseAuth.auth.signOut();
   }
 
   forgotPassword(passwordResetEmail) {
-    return this.firebaseAuth.auth.sendPasswordResetEmail(passwordResetEmail)
-      .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
-      }).catch((error) => {
-        window.alert(error)
-      })
+    return this.firebaseAuth.auth.sendPasswordResetEmail(passwordResetEmail);
   }
 
 }

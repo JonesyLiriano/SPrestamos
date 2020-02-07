@@ -6,11 +6,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { CalculatorPage } from './calculator.page';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: CalculatorPage
+    component: CalculatorPage,
+    canActivate: [AuthGuard]
   }
 ];
 

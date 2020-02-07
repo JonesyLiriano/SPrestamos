@@ -126,7 +126,7 @@ export class LoanGeneratorPage implements OnInit {
         loanAmount: this.loanAmount.value,
         loanTerm: this.loanTerm.value,
         payBack: this.payBack.value,
-        logDate: this.date.toDateString(),
+        logDate: this.date.toISOString(),
         uid: this.authService.userAuthData.uid,
         state: 'active',
         overdue: false,

@@ -1,9 +1,30 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>loan-detail-modal</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-header translucent>
+    <ion-toolbar color="tertiary">
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">Atras</ion-button>
+      </ion-buttons>
+      <ion-title>Historial de Pago</ion-title>
+    </ion-toolbar>
+    </ion-header>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+  <ion-card color="primary" class="ion-text-center w-100">
+    <ion-card-content class="font-size-17">
+      <p># Pagos realizados: {{amountPayments}}</p>
+      <p class="ion-text-right">Intereses: ${{interes}}</p>
+      <p class="ion-text-right">Capital abonado: ${{capital}}</p>
+    </ion-card-content>
+  </ion-card>
+  <ion-virtual-scroll [items]="payments | paidPayments: true" approxItemHeight="320px">
+    <ion-card *virtualItem="let payment">
+      <ion-card-header>
+        <ion-card-subtitle><p class="ion-text-end">Monto</p></ion-card-subtitle>
+        <ion-card-title><p class="ion-text-end">${{payment.amount}}</p></ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Tipo de pago: {{payment.type}}</p>        
+        <p>Fecha: {{payment.logDate}}</p>
+      </ion-card-content>
+    </ion-card>  
+  </ion-virtual-scroll>
 </ion-content>

@@ -62,7 +62,7 @@ export class CustomerUpdateReadModalPage implements OnInit, AfterViewInit {
     this.loadingService.dismissLoading();
   }
 
-  async onClickSubmit() {
+  async onSubmit() {
     try {
       if (this.customerForm.valid) {
         const alert = await this.alertController.create({

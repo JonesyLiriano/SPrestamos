@@ -45,7 +45,7 @@ export class LoginPage implements OnInit {
         this.loginForm.reset();   
         if (user) {
           if(user.user.emailVerified) {  
-            this.router.navigate(['/tabs/customers']);    
+            this.router.navigate(['/tabs/loans-display']);    
           } else {         
             this.router.navigate(['verify-email-address']);   
           }
