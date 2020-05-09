@@ -86,11 +86,16 @@
               </ion-slides>
             </div>
             <div class="ion-padding">
+<<<<<<< HEAD
               <ion-button size="large" type="button" *ngIf="!disablePrevBtn"
+=======
+              <ion-button type="button" *ngIf="!disablePrevBtn"
+>>>>>>> calculator
                 [disabled]="!basicInfoForm.valid || !accountInfoForm.valid" expand="block" color="tertiary"
                 (click)="onSubmit()">
                 Aceptar <ion-icon name="send" slot="end"></ion-icon>
               </ion-button>
+<<<<<<< HEAD
               <ion-button size="large" type="button" *ngIf="!disablePrevBtn" expand="block" (click)="goBack()">Atras
                   <ion-icon name="arrow-round-back"></ion-icon>
               </ion-button>
@@ -98,6 +103,19 @@
                 [disabled]="!basicInfoForm.valid" (click)="goNext()">Siguiente <ion-icon name="arrow-round-forward" slot="end">
                 </ion-icon>
               </ion-button>
+=======
+              <ion-button  type="button" *ngIf="!disablePrevBtn" expand="block" (click)="goBack()">Atras
+                  <ion-icon name="arrow-round-back"></ion-icon>
+              </ion-button>
+              <ion-button type="button" expand="block" *ngIf="!disableNextBtn"
+                [disabled]="!basicInfoForm.valid" (click)="goNext()">Siguiente <ion-icon name="arrow-round-forward" slot="end">
+                </ion-icon>
+              </ion-button>
+              <ion-button type="button" expand="block" *ngIf="!disableNextBtn" color="light"
+               (click)="goLogin()">Cancelar <ion-icon name="arrow-round-back" slot="start">
+                </ion-icon>
+              </ion-button>
+>>>>>>> calculator
             </div>
           </ion-card-content>
         </ion-card>

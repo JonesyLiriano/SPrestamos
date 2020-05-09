@@ -14,6 +14,7 @@ import { delay } from 'q';
 })
 export class LoansHistoryPage implements OnInit {
 
+<<<<<<< HEAD
    
   loan: Loan;
   loans: Loan[];
@@ -52,5 +53,54 @@ export class LoansHistoryPage implements OnInit {
    onFilter(search: string) {
      this.search = search;
  }
+=======
+
+  loan: Loan;
+  loans: Loan[];
+  search;
+  loanStatus: string;
+  inicialize: boolean;
+
+  constructor(private fmc: FcmService,
+    private modalController: ModalController, private alertController: AlertController,
+    private loansService: LoansService,
+    private loadingService: LoadingService) { }
+
+  ngOnInit() {
+    this.fmc.getToken();
+    this.loanStatus = 'settled';    
+  }
+  ionViewDidEnter() {
+    if(this.inicialize) {
+    this.loadLoans();
+    }
+    this.inicialize = true;
+  }
+
+  async loadLoans() {
+    await this.loadingService.presentLoading('Cargando...');
+    await delay(300);
+    this.loansService.getLoans(this.loanStatus).subscribe(data => {
+      this.loans = data;
+      this.loadingService.dismissLoading();
+    }, err => {
+      this.loadingService.dismissLoading();
+    });
+  }
+
+
+  async presentReadModal(loan: Loan) {
+    await this.loadingService.presentLoading('Cargando...');
+    const modal = await this.modalController.create({
+      component: LoanReadModalPage,
+      componentProps: { loan }
+    });
+    await modal.present();
+  }
+
+  onFilter(search: string) {
+    this.search = search;
+  }
+>>>>>>> calculator
 
 }

@@ -17,6 +17,7 @@ export class LoansService {
   getLoans(filter: string) {
     return this.afs.collection<Loan>('loans', ref => {
       let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
+<<<<<<< HEAD
       if (filter['value'] == 'active') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('state', '==', 'active')
       };
@@ -28,6 +29,20 @@ export class LoansService {
       };
       if (filter['value'] == 'cancelled') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('state', '==', 'cancelled')
+=======
+      if (filter == 'active') {
+        query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
+      };
+      if (filter == 'overdue') {
+        query = query.where('uid', '==', this.authService.userAuthData.uid).where('overdue', '==', true)
+        .where('status', '==', 'active')
+      };
+      if (filter == 'settled') {
+        query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'settled')
+      };
+      if (filter == 'cancelled') {
+        query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'cancelled')
+>>>>>>> calculator
       };
       return query;
     }).snapshotChanges().pipe(
@@ -44,6 +59,10 @@ export class LoansService {
   }
 
   addLoanDetails(loanId: string, loanDetails: LoanDetails) {
+<<<<<<< HEAD
+=======
+    console.log('payment');
+>>>>>>> calculator
     return this.loansCollection.doc(loanId).collection('loanDetail').add(loanDetails);
   }
 
@@ -64,6 +83,7 @@ export class LoansService {
       }))
     );
   }
+<<<<<<< HEAD
 
   // overdues(payback: string, lastPayment: string): number {
   //   const today = new Date();
@@ -90,4 +110,6 @@ export class LoansService {
   //      return 0;
   //   }
   // }
+=======
+>>>>>>> calculator
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <ion-header>
   <ion-toolbar>
     <ion-title>calculator</ion-title>
@@ -7,3 +8,97 @@
 <ion-content>
 
 </ion-content>
+=======
+<app-toolbar [title]="'Calculadora'"></app-toolbar>
+<ion-content padding>
+  <form [formGroup]="calculatorForm" (ngSubmit)="onSubmit()">
+    <ion-grid>
+      <ion-row>
+        <ion-card class="w-100">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="7">
+                <ion-item>
+                  <ion-label position="floating">Monto $<ion-text color="danger">*</ion-text>
+                  </ion-label>
+                  <ion-input required formControlName="loanAmount" type="text" clearInput></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="5">
+                <ion-item class="w-100">
+                  <ion-label position="floating">%Interes<ion-text color="danger">*</ion-text>
+                  </ion-label>
+                  <ion-input required formControlName="interestRate" type="number" clearInput></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <ion-item>
+                  <ion-label position="floating">Duracion<ion-text color="danger">*</ion-text>
+                  </ion-label>
+                  <ion-input required formControlName="duration" type="number" clearInput></ion-input>
+                  <ion-text class="custom-flex-bottom" slot="end">Meses
+                  </ion-text>
+                </ion-item>
+              </ion-col>                  
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item class="w-100">
+                  <ion-label>Termino</ion-label>
+                  <ion-text color="danger">*</ion-text>
+                  <ion-select name="payBack" formControlName="payBack" placeholder="Pagos" required>
+                    <ion-select-option *ngFor="let payback of payBacks" [value]="payback">
+                      {{payback}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" color="tertiary" type="submit" [disabled]="calculatorForm.invalid">
+            Calcular
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button (click)="clearForm()" expand="block" color="light">
+            Limpiar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="showResult">
+        <ion-card color="primary" class="ion-text-center w-100">
+          <ion-card-content class="font-size-17">
+            Resultado
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row *ngIf="showResult">
+        <ion-card class="w-100">
+          <ion-card-content>
+            <ion-row>
+              <ion-item>
+                <ion-label position="floating">Monto Total
+                </ion-label>
+                <ion-input required formControlName="totalLoanAmount" type="number" clearInput></ion-input>
+              </ion-item>
+            </ion-row>
+            <ion-row>
+              <ion-item>
+                <ion-label position="floating">Interes Total
+                </ion-label>
+                <ion-input required formControlName="totalInteresAmount" type="number" clearInput></ion-input>
+              </ion-item>
+            </ion-row>            
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+>>>>>>> calculator

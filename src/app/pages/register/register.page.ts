@@ -149,5 +149,12 @@ export class RegisterPage implements OnInit {
   async goBack() {
     await this.ionSlides.slidePrev(400);
   }
+<<<<<<< HEAD
+=======
+
+  goLogin() {
+    this.router.navigate(['/login']);
+  }
+>>>>>>> calculator
   
 }

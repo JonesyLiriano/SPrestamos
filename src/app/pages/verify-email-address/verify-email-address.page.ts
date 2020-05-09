@@ -22,11 +22,22 @@ export class VerifyEmailAddressPage implements OnInit{
   }
 
   async onClick() {
+<<<<<<< HEAD
+=======
+    try {
+>>>>>>> calculator
     await this.loadingService.presentLoading('Cargando...');
     await this.authService.sendVerificationMail();
     this.loadingService.dismissLoading();
     this.toastService.presentSuccessToast('Se ha enviado el link para verificar su email!, revise su bandeja de entrada.');
     this.router.navigate(['/login']);
+<<<<<<< HEAD
+=======
+    } catch (error) {
+      this.loadingService.dismissLoading();
+    }
+    
+>>>>>>> calculator
   }
 
 }

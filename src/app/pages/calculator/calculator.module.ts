@@ -7,6 +7,10 @@ import { IonicModule } from '@ionic/angular';
 
 import { CalculatorPage } from './calculator.page';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+<<<<<<< HEAD
+=======
+import { SharedModule } from 'src/app/shared/shared.module';
+>>>>>>> calculator
 
 const routes: Routes = [
   {
@@ -21,6 +25,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+<<<<<<< HEAD
+=======
+    SharedModule,
+>>>>>>> calculator
     RouterModule.forChild(routes)
   ],
   declarations: [CalculatorPage]

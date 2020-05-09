@@ -3,7 +3,11 @@
   <app-filter (filter)="onFilter($event)"></app-filter>
   <ion-list>
     <ion-list-header>Filtrado</ion-list-header>
+<<<<<<< HEAD
     <ion-radio-group (ionChange)="loadLoans($event)">
+=======
+    <ion-radio-group (ionChange)="loadLoans()" [(ngModel)]="loanStatus">
+>>>>>>> calculator
       <ion-row>
         <ion-col size="6">
           <ion-item>

@@ -9,7 +9,11 @@ export class Loan {
     payBack: string | undefined;
     logDate!: string;
     uid: string | undefined;
+<<<<<<< HEAD
     state: string | undefined;
+=======
+    status: string | undefined;
+>>>>>>> calculator
     overdue: boolean | undefined;
 
 

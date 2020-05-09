@@ -12,7 +12,12 @@
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
+<<<<<<< HEAD
             <form [formGroup]="loginForm" #formDirective="ngForm" (ngSubmit)="onClickSubmit(formDirective)">
+=======
+            <form [formGroup]="loginForm" #formDirective="ngForm" (ngSubmit)="onClickSubmit(formDirective)"
+            (keyup.enter)= "onClickSubmit(formDirective)">
+>>>>>>> calculator
               <div class="ion-padding">
                 <ion-item>
                   <ion-label position="floating">Email</ion-label>
@@ -29,6 +34,7 @@
                 </ion-item>
               </div>
               <div class="ion-padding ion-text-center">
+<<<<<<< HEAD
                 <ion-button size="large" type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">
                   Acceder <ion-icon name="log-in" slot="end"></ion-icon>
                 </ion-button>
@@ -36,6 +42,15 @@
                   Registrarse <ion-icon name="mail" slot="end"></ion-icon>
                 </ion-button>
                 <a class="custom-text" [routerLink]="['/forgot-password']" size="large" expand="block">
+=======
+                <ion-button  type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">
+                  Acceder <ion-icon name="log-in" slot="end"></ion-icon>
+                </ion-button>
+                <ion-button class="custom-margin-bot-1"  type="button" expand="block" color="primary" (click)="registerForm()">
+                  Registrarse <ion-icon name="mail" slot="end"></ion-icon>
+                </ion-button>
+                <a class="custom-text" [routerLink]="['/forgot-password']"  expand="block">
+>>>>>>> calculator
                   Olvidaste la contraseña?
                 </a>
               </div>
