@@ -19,21 +19,12 @@ export class AppComponent {
     this.initializeApp();
   }
 
-<<<<<<< HEAD
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.overlaysWebView(false);
-      this.statusBar.backgroundColorByHexString('#7044ff');
-      this.splashScreen.hide();      
-      
-=======
   async initializeApp() {
     await this.platform.ready();
     this.statusBar.overlaysWebView(false);
     this.statusBar.backgroundColorByHexString('#7044ff');
     this.splashScreen.hide();      
     this.platform.backButton.subscribeWithPriority(1, () => { // to disable hardware back button on whole app
->>>>>>> calculator
     });
   }
 }

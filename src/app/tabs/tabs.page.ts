@@ -1,18 +1,11 @@
 import { Component } from '@angular/core';
 import { FcmService } from '../services/fcm.service';
-<<<<<<< HEAD
-import { AlertController } from '@ionic/angular';
-import { LoadingService } from '../services/loading.service';
-import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
-=======
 import { AlertController, ModalController } from '@ionic/angular';
 import { LoadingService } from '../services/loading.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Loan } from '../models/loan';
 import { PaymentModalPage } from '../pages/payment-modal/payment-modal.page';
->>>>>>> calculator
 
 @Component({
   selector: 'app-tabs',
@@ -23,15 +16,6 @@ export class TabsPage {
 
   constructor(private fcmService: FcmService, private alertController: AlertController,
               private loadingService: LoadingService, private authService: AuthService,
-<<<<<<< HEAD
-              private router: Router) {
-    this.fcmService.getToken();
-      this.fcmService.listenToNotifications().subscribe((data) => {
-        alert(data);
-      });
-  }
-
-=======
               private router: Router, private modalController: ModalController) {
     this.fcmService.getToken();
     this.fcmService.listenToNotifications().subscribe((data: any) => {
@@ -63,7 +47,6 @@ export class TabsPage {
     await modal.present();
   }
   
->>>>>>> calculator
   async logOut() {
     const alert = await this.alertController.create({
       header: 'Confirmacion!',

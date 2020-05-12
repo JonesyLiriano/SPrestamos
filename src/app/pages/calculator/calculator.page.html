@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-<ion-header>
-  <ion-toolbar>
-    <ion-title>calculator</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-</ion-content>
-=======
 <app-toolbar [title]="'Calculadora'"></app-toolbar>
 <ion-content padding>
   <form [formGroup]="calculatorForm" (ngSubmit)="onSubmit()">
@@ -85,14 +74,14 @@
               <ion-item>
                 <ion-label position="floating">Monto Total
                 </ion-label>
-                <ion-input required formControlName="totalLoanAmount" type="number" clearInput></ion-input>
+                <ion-input formControlName="totalLoanAmount" type="text" clearInput></ion-input>
               </ion-item>
             </ion-row>
             <ion-row>
-              <ion-item>
+              <ion-item>  
                 <ion-label position="floating">Interes Total
                 </ion-label>
-                <ion-input required formControlName="totalInteresAmount" type="number" clearInput></ion-input>
+                <ion-input formControlName="totalInteresAmount" type="text" clearInput></ion-input>
               </ion-item>
             </ion-row>            
           </ion-card-content>
@@ -101,4 +90,3 @@
     </ion-grid>
   </form>
 </ion-content>
->>>>>>> calculator

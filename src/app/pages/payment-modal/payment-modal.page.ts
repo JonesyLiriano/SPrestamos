@@ -59,10 +59,7 @@ export class PaymentModalPage implements OnInit {
   async onSubmit() {
     try {
       if (this.paymentForm.valid) {
-<<<<<<< HEAD
-=======
         console.log(this.paymentOptions.value);
->>>>>>> calculator
         const alert = await this.alertController.create({
           header: 'Confirmacion!',
           message: 'Esta seguro que desea realizar este pago del <strong>prestamo</strong>?',
@@ -86,10 +83,7 @@ export class PaymentModalPage implements OnInit {
             }
           ]
         });
-<<<<<<< HEAD
-=======
         alert.present();
->>>>>>> calculator
       } else {
         this.toastService.presentDefaultToast('Verifique los campos nuevamente.');
       }
@@ -131,11 +125,7 @@ export class PaymentModalPage implements OnInit {
     }
   }
 
-<<<<<<< HEAD
-  async doPayment() {
-=======
   async doPayment() {    
->>>>>>> calculator
     if (this.paymentOptions.value == 'Capital') {
       await this.loansService.addLoanDetails(this.loan.idDoc, this.setPaymentCapital());
       this.toastService.presentSuccessToast('El abono al capital se ha realizado correctamente.');

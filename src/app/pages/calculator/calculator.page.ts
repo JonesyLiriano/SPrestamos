@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
-=======
 import { Validators, FormBuilder } from '@angular/forms';
 import { ToastService } from 'src/app/services/toast.service';
 import { formatCurrency } from '@angular/common';
->>>>>>> calculator
 
 @Component({
   selector: 'app-calculator',
@@ -13,13 +10,6 @@ import { formatCurrency } from '@angular/common';
 })
 export class CalculatorPage implements OnInit {
 
-<<<<<<< HEAD
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-=======
   totalInteres: number;
   totalAmount: number;
   loanDuration: number;
@@ -109,10 +99,9 @@ export class CalculatorPage implements OnInit {
         break;
     }
     this.totalInteres = this.loanDuration * (this.interestRate.value * this.loanAmount.value);
-    this.totalAmount = this.totalInteres + this.loanAmount.value
-    this.totalInteresAmount.setValue(formatCurrency(this.totalInteres,'DO','DOP'));
-    this.totalLoanAmount.setValue(this.totalAmount);
+    this.totalAmount = this.totalInteres + this.loanAmount.value;
+    this.totalInteresAmount.setValue(formatCurrency(this.totalInteres, 'en', '$'));
+    this.totalLoanAmount.setValue(formatCurrency(this.totalAmount, 'en', '$'));
     this.showResult = true;
   }
->>>>>>> calculator
 }

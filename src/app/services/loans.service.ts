@@ -17,19 +17,6 @@ export class LoansService {
   getLoans(filter: string) {
     return this.afs.collection<Loan>('loans', ref => {
       let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-<<<<<<< HEAD
-      if (filter['value'] == 'active') {
-        query = query.where('uid', '==', this.authService.userAuthData.uid).where('state', '==', 'active')
-      };
-      if (filter['value'] == 'overdue') {
-        query = query.where('uid', '==', this.authService.userAuthData.uid).where('overdue', '==', 'true')
-      };
-      if (filter['value'] == 'settled') {
-        query = query.where('uid', '==', this.authService.userAuthData.uid).where('state', '==', 'settled')
-      };
-      if (filter['value'] == 'cancelled') {
-        query = query.where('uid', '==', this.authService.userAuthData.uid).where('state', '==', 'cancelled')
-=======
       if (filter == 'active') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
       };
@@ -42,7 +29,6 @@ export class LoansService {
       };
       if (filter == 'cancelled') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'cancelled')
->>>>>>> calculator
       };
       return query;
     }).snapshotChanges().pipe(
@@ -59,10 +45,7 @@ export class LoansService {
   }
 
   addLoanDetails(loanId: string, loanDetails: LoanDetails) {
-<<<<<<< HEAD
-=======
     console.log('payment');
->>>>>>> calculator
     return this.loansCollection.doc(loanId).collection('loanDetail').add(loanDetails);
   }
 
@@ -83,33 +66,4 @@ export class LoansService {
       }))
     );
   }
-<<<<<<< HEAD
-
-  // overdues(payback: string, lastPayment: string): number {
-  //   const today = new Date();
-  //   const diff = Math.abs(today.getTime() - new Date(lastPayment).getTime());
-  //   const dayDiff = Math.ceil(diff / (1000 * 3600 * 24));
-  //   const monthDiff = Math.ceil(diff / (86400000*30));
-  //   switch (payback) {
-  //     case 'Por dia':
-  //       const dia = 1;
-  //       return dayDiff/dia;
-  //     case 'Semanal':
-  //       const semanal = 7;
-  //       return dayDiff/semanal;
-  //     case 'Quincenal':
-  //       const quincenal = 15;
-  //       return dayDiff/quincenal;
-  //     case 'Mensual':
-  //       const mensual = 1;
-  //       return monthDiff/mensual;
-  //     case 'Trimestral':
-  //       const trimestal = 3;
-  //       return monthDiff/trimestal;
-  //     default:
-  //      return 0;
-  //   }
-  // }
-=======
->>>>>>> calculator
 }

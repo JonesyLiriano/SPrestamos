@@ -17,10 +17,6 @@ export class AuthService {
   isLoggedIn() {
      this.firebaseAuth.authState.subscribe( user => {
       if (user) {
-<<<<<<< HEAD
-        console.log(user);
-=======
->>>>>>> calculator
         this.userAuthData = user; 
       }
       else {        

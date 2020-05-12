@@ -102,15 +102,10 @@ export class LoanGeneratorPage implements OnInit {
                 await this.loadingService.presentLoading('Cargando...');
                 this.setLoan();
                 await this.loansService.createLoan(this.loan);
-<<<<<<< HEAD
-                this.toastService.presentSuccessToast('Prestamo registrado correctamente!');
-                this.loadingService.dismissLoading();  
-=======
                 this.loanForm.reset();
                 this.toastService.presentSuccessToast('Prestamo registrado correctamente!');                
                 this.loadingService.dismissLoading();  
                 
->>>>>>> calculator
               }
             }
           ]
@@ -135,11 +130,7 @@ export class LoanGeneratorPage implements OnInit {
         payBack: this.payBack.value,
         logDate: this.date.toISOString(),
         uid: this.authService.userAuthData.uid,
-<<<<<<< HEAD
-        state: 'active',
-=======
         status: 'active',
->>>>>>> calculator
         overdue: false,
       }
     }

@@ -6,10 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ReportsPage } from './reports.page';
-<<<<<<< HEAD
-=======
 import { SharedModule } from 'src/app/shared/shared.module';
->>>>>>> calculator
 
 const routes: Routes = [
   {
@@ -23,10 +20,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-<<<<<<< HEAD
-=======
     SharedModule,
->>>>>>> calculator
     RouterModule.forChild(routes)
   ],
   declarations: [ReportsPage]

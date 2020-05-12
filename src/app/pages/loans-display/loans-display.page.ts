@@ -16,78 +16,6 @@ import { delay } from 'q';
 })
 export class LoansDisplayPage implements OnInit {
 
-<<<<<<< HEAD
-   
-  loan: Loan;
-  loans: Loan[];
-  search;
-
-  constructor(private fmc: FcmService,
-              private modalController: ModalController, private alertController: AlertController,
-              private loansService: LoansService, private storage: Storage,
-              private loadingService: LoadingService) { }
-
-  ngOnInit() {
-    this.fmc.getToken();
-  }
- 
-   async loadLoans(event: any) {
-    await this.loadingService.presentLoading('Cargando...');
-    await delay(300);
-    this.loansService.getLoans(event.detail).subscribe(data => {
-     this.loans = data;
-     this.loadingService.dismissLoading();
-    }, err => {
-      this.loadingService.dismissLoading();
-    });
-   }
- 
-   async cancelLoan(loan: Loan) {
-     const alert = await this.alertController.create({
-       header: 'Confirmacion!',
-       message: 'Esta seguro que desea <strong>cancelar</strong> este prestamo?',
-       buttons: [
-         {
-           text: 'Cancelar',
-           role: 'cancel',
-           cssClass: 'secondary'
-         }, {
-           text: 'Cancelar Prestamo',
-           handler: async () => {
-             await this.loadingService.presentLoading('Cargando...');
-             loan.state = 'cancelled';
-             await this.loansService.updateLoan(loan);
-             this.loadingService.dismissLoading();
-           }
-         }
-       ]
-     });
- 
-     await alert.present();
-   }
- 
-   async presentReadModal(loan: Loan) {
-     await this.loadingService.presentLoading('Cargando...');
-     const modal = await this.modalController.create({
-     component: LoanReadModalPage,
-     componentProps: {loan}
-   });
-     await modal.present();
-   }
-   
-   onFilter(search: string) {
-     this.search = search;
- }
-
- async presentPaymentModal(loan: Loan) {
-  await this.loadingService.presentLoading('Cargando...');
-  const modal = await this.modalController.create({
-  component: PaymentModalPage,
-  componentProps: {loan}
-});
-  await modal.present();
-}
-=======
 
   loan: Loan;
   loans: Loan[];
@@ -170,6 +98,5 @@ export class LoansDisplayPage implements OnInit {
     });
     await modal.present();
   }
->>>>>>> calculator
 
 }

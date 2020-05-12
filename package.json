@@ -43,11 +43,7 @@
     "cordova-sqlite-storage": "^3.4.0",
     "cordova-support-android-plugin": "^1.0.1",
     "core-js": "^2.5.4",
-<<<<<<< HEAD
     "firebase": "^7.2.2",
-=======
-    "firebase": "^7.10.0",
->>>>>>> calculator
     "hammerjs": "^2.0.8",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
@@ -56,11 +52,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.801.2",
-<<<<<<< HEAD
     "@angular-devkit/build-angular": "~0.801.2",
-=======
-    "@angular-devkit/build-angular": "^0.803.24",
->>>>>>> calculator
     "@angular-devkit/core": "~8.1.2",
     "@angular-devkit/schematics": "~8.1.2",
     "@angular/cli": "~8.1.2",

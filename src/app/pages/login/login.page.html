@@ -12,13 +12,9 @@
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-<<<<<<< HEAD
-            <form [formGroup]="loginForm" #formDirective="ngForm" (ngSubmit)="onClickSubmit(formDirective)">
-=======
             <form [formGroup]="loginForm" #formDirective="ngForm" (ngSubmit)="onClickSubmit(formDirective)"
             (keyup.enter)= "onClickSubmit(formDirective)">
->>>>>>> calculator
-              <div class="ion-padding">
+              <div>
                 <ion-item>
                   <ion-label position="floating">Email</ion-label>
                   <ion-input formControlName="email" type="email" clearInput required autocapitalize="on"></ion-input>
@@ -31,28 +27,19 @@
                   <ion-icon class="custom-margin-top-1" name="lock" slot="start"></ion-icon>
                   <ion-icon *ngIf="password.value" [name]="showPassword? 'eye-off' : 'eye'" slot="end"
                     (click)="showPassword = !showPassword"></ion-icon>
-                </ion-item>
+                </ion-item>                
               </div>
-              <div class="ion-padding ion-text-center">
-<<<<<<< HEAD
-                <ion-button size="large" type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">
+              <div class="ion-padding-top ion-text-center">
+                <ion-button class="ion-margin-bottom" type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">
                   Acceder <ion-icon name="log-in" slot="end"></ion-icon>
                 </ion-button>
-                <ion-button class="custom-margin-bot-1" size="large" type="button" expand="block" color="primary" (click)="registerForm()">
-                  Registrarse <ion-icon name="mail" slot="end"></ion-icon>
-                </ion-button>
-                <a class="custom-text" [routerLink]="['/forgot-password']" size="large" expand="block">
-=======
-                <ion-button  type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">
-                  Acceder <ion-icon name="log-in" slot="end"></ion-icon>
-                </ion-button>
-                <ion-button class="custom-margin-bot-1"  type="button" expand="block" color="primary" (click)="registerForm()">
-                  Registrarse <ion-icon name="mail" slot="end"></ion-icon>
-                </ion-button>
-                <a class="custom-text" [routerLink]="['/forgot-password']"  expand="block">
->>>>>>> calculator
+                <a class="custom-text ion-text-right" [routerLink]="['/forgot-password']">
                   Olvidaste la contraseña?
                 </a>
+                <p><ion-text color="dark">No tienes una cuenta? </ion-text><a class="custom-text" color="tertiary" (click)="registerForm()">
+                 <ion-text color="tertiary"> Registrate</ion-text>
+                </a></p>
+                              
               </div>
             </form>
           </ion-card-content>

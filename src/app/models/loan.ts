@@ -9,11 +9,7 @@ export class Loan {
     payBack: string;
     logDate: string;
     uid: string;
-<<<<<<< HEAD
-    state: string;
-=======
     status: string;
->>>>>>> calculator
     overdue: boolean;
 
 
