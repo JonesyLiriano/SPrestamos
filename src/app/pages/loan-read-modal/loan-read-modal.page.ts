@@ -67,7 +67,7 @@ export class LoanReadModalPage implements OnInit {
     private modalController: ModalController, private loansService: LoansService) { }
 
   ngOnInit() {
-    this.customer.setValue(this.loan.customerId);
+    this.customer.setValue(this.loan.customer);
     this.initialDate.setValue(this.loan.initialDate);
     this.interestRate.setValue(this.loan.interestRate);
     this.loanAmount.setValue(this.loan.loanAmount);

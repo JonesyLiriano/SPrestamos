@@ -98,8 +98,8 @@ export class CalculatorPage implements OnInit {
       default:
         break;
     }
-    this.totalInteres = this.loanDuration * (this.interestRate.value * this.loanAmount.value);
-    this.totalAmount = this.totalInteres + this.loanAmount.value;
+    this.totalInteres = this.loanDuration * ((this.interestRate.value / 100) * this.loanAmount.value);
+    this.totalAmount = +this.totalInteres + +this.loanAmount.value;
     this.totalInteresAmount.setValue(formatCurrency(this.totalInteres, 'en', '$'));
     this.totalLoanAmount.setValue(formatCurrency(this.totalAmount, 'en', '$'));
     this.showResult = true;

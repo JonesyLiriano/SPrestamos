@@ -77,7 +77,7 @@ export class CustomerUpdateReadModalPage implements OnInit, AfterViewInit {
               text: 'Aceptar',
               handler: async () => {
                 await this.loadingService.presentLoading('Cargando...');
-                await this.customersService.updateCustomer(this.setCustomer());
+                await this.customersService.updateCustomer(this.customer.idDoc,this.setCustomer());
                 this.loadingService.dismissLoading(); 
                 this.toastService.presentSuccessToast('Cliente actualizado correctamente!');
                 this.dismissModal();
@@ -98,14 +98,14 @@ export class CustomerUpdateReadModalPage implements OnInit, AfterViewInit {
   setCustomer() {
     return this.customer = {
       name: this.customer.name,
-      noDocument: this.customerForm.value['noDocument'],
+      noDocument: this.noDocument.value,
       address: {
-        state: this.customerForm.value['state'],
-        street: this.customerForm.value['street']
+        state: this.state.value,
+        street: this.street.value
       },
-      phone: this.customerForm.value['phone'],
-      secondPhone: this.customerForm.value['secondPhone'],
-      email: this.customerForm.value['name'],
+      phone: this.phone.value,
+      secondPhone: this.secondPhone.value,
+      email: this.email.value,
       uid: this.authService.userAuthData.uid
     }
   }

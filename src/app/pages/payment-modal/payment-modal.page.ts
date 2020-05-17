@@ -51,6 +51,7 @@ export class PaymentModalPage implements OnInit {
     this.pendingAmount = 0;
     this.overdues = 0;
     this.cuotesToPay = 0;
+    this.paymentOptions.setValue('Interes');
     this.getDetail();
   }
   ngAfterViewInit(): void {
@@ -59,7 +60,6 @@ export class PaymentModalPage implements OnInit {
   async onSubmit() {
     try {
       if (this.paymentForm.valid) {
-        console.log(this.paymentOptions.value);
         const alert = await this.alertController.create({
           header: 'Confirmacion!',
           message: 'Esta seguro que desea realizar este pago del <strong>prestamo</strong>?',
@@ -99,7 +99,7 @@ export class PaymentModalPage implements OnInit {
       amount: this.loanAmount.value,
       type: this.paymentOptions.value,
       paid: true
-    }
+    };
   }
   setPaymentInteres() {
     this.interesPayments.forEach(async element => {
@@ -138,8 +138,8 @@ export class PaymentModalPage implements OnInit {
     }
   }
 
-  paymentOption(event: any) {
-    if (event.detail.value == 'Interes') {
+  paymentOption() {
+    if (this.paymentOptions.value == 'Interes') {
       this.payCuote();
     } else {
       this.payCustomAmount();
@@ -166,7 +166,7 @@ export class PaymentModalPage implements OnInit {
   }
 
   getDetail() {
-    this.loansService.getLoanDetail(this.loan.idDoc).subscribe(data => {
+    return this.loansService.getLoanDetail(this.loan.idDoc).subscribe(data => {
       this.payments = data;
       this.payments.filter(x => x.type == 'Capital' && x.paid == true).forEach(payment => {
         this.pendingAmount += (payment['amount']);
@@ -174,6 +174,7 @@ export class PaymentModalPage implements OnInit {
       this.pendingAmount = this.loan.loanAmount - this.pendingAmount;
       this.overdues = this.payments.filter(x => x.type == 'Interes' && x.paid == false).length;
       this.cuotesToPay = this.overdues;
+      this.paymentOption();
     });
   }
 

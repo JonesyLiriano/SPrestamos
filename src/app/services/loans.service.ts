@@ -19,6 +19,7 @@ export class LoansService {
       let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
       if (filter == 'active') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
+        .where('overdue', '==', false)
       };
       if (filter == 'overdue') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('overdue', '==', true)

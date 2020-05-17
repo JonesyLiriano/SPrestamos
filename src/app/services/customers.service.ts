@@ -33,8 +33,9 @@ export class CustomersService {
   }
 
 
-  updateCustomer(customer: Customer) {
-    return this.customersCollection.doc(customer.idDoc).update(customer);
+  updateCustomer(idDoc: string,customer: Customer) {
+    console.log(customer);
+    return this.customersCollection.doc(idDoc).update(customer);
   }
 
   deleteCustomer(customer: Customer) {

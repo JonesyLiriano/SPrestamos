@@ -27,7 +27,7 @@
           <ion-icon name="paper" slot="start"></ion-icon>
           {{ loan.customer }}
           <div class="item-note" slot="end">
-            {{ loan.loanAmount }}
+            {{ loan.loanAmount | currency}}
           </div>
         </ion-item>
         <ion-item-options side="end">

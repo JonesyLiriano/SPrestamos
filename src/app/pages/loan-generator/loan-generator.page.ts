@@ -65,15 +65,17 @@ export class LoanGeneratorPage implements OnInit {
       'Trimestral'
     ];
     this.date = new Date();
-    this.initialDate.setValue(new Date(this.date.getTime() -
-      this.date.getTimezoneOffset() * 60000).toISOString());
-    this.loanTerm.setValue(new Date(this.date.getTime() -
-      this.date.getTimezoneOffset() * 60000).toISOString());
+    this.inicializeDates();    
     this.maxDate = new Date((this.date.getTime() + 6.36e11) -
       this.date.getTimezoneOffset() * 60000).toISOString();
     this.loadCustomers();
   }
-
+inicializeDates() {
+  this.initialDate.setValue(new Date(this.date.getTime() -
+      this.date.getTimezoneOffset() * 60000).toISOString());
+    this.loanTerm.setValue(new Date(this.date.getTime() -
+      this.date.getTimezoneOffset() * 60000).toISOString());
+}
 
   async loadCustomers() {
     await this.loadingService.presentLoading('Cargando...');
@@ -103,6 +105,7 @@ export class LoanGeneratorPage implements OnInit {
                 this.setLoan();
                 await this.loansService.createLoan(this.loan);
                 this.loanForm.reset();
+                this.inicializeDates();
                 this.toastService.presentSuccessToast('Prestamo registrado correctamente!');                
                 this.loadingService.dismissLoading();  
                 

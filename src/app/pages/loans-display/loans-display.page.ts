@@ -31,6 +31,7 @@ export class LoansDisplayPage implements OnInit {
   ngOnInit() {
     this.fmc.getToken();
     this.loanStatus = 'overdue';
+    this.loadLoans();
     
   }
   ionViewDidEnter() {

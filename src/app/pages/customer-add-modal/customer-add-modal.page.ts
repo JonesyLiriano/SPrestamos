@@ -104,7 +104,7 @@ export class CustomerAddModalPage implements OnInit, AfterViewInit {
       },
       phone: this.customerForm.value['phone'],
       secondPhone: this.customerForm.value['secondPhone'],
-      email: this.customerForm.value['name'],
+      email: this.customerForm.value['email'],
       uid: this.authService.userAuthData.uid
     }
   }
