@@ -35,7 +35,7 @@ export const verifyLoansOverdue = functions.pubsub.schedule('5 11 * * *').timeZo
         .map(function (o: any) { return Number(new Date(o.logDate)); })).toString() != '-Infinity' ?
           Math.max.apply(null, payments.filter((x: any) => x.type == 'Interes')
             .map(function (o: any) { return Number(new Date(o.logDate)); })) : doc.data().initialDate).toISOString();
-            
+            try {
             if (overdues(doc.data().payBack, lastPayment, lastCuote)) {
           let interes = 0;
           let capital = 0;
@@ -58,6 +58,9 @@ export const verifyLoansOverdue = functions.pubsub.schedule('5 11 * * *').timeZo
             });
           });
         }
+      } catch(e) {
+        console.log('error loan: ' + e);
+      }
       });
     }).catch((err: any) => {
       console.log('Error getting documents', err);
@@ -143,8 +146,8 @@ async function sendPushNotification(amountInteres: number, userToken: string, lo
     initialDate: loan.initialDate,
     customerId: loan.customerId,
     customer: loan.customer,
-    interestRate: loan.interestRate,
-    loanAmount: loan.loanAmount,
+    interestRate: (loan.interestRate || '').toString(),
+    loanAmount: (loan.loanAmount || '').toString(),
     loanTerm: loan.loanTerm,
     payBack: loan.payBack,
     logDate: loan.logDate,

@@ -1,9 +1,5 @@
 import * as WelcomeEmail from './users/onCreate/welcomeMessage';
-<<<<<<< HEAD
-
-=======
 import * as VerifyLoansOverdue from './loans/loansScan/verifyLoansOverduePerDay';
->>>>>>> calculator
 
 
 // // Start writing Firebase Functions
@@ -13,9 +9,5 @@ import * as VerifyLoansOverdue from './loans/loansScan/verifyLoansOverduePerDay'
 //  response.send("Hello from Firebase!");
 // });
 
-<<<<<<< HEAD
-export const sendWelcomeEmail = WelcomeEmail.sendWelcomeEmail;
-=======
 export const sendWelcomeEmail = WelcomeEmail.sendWelcomeEmail;
 export const verifyLoansOverdue = VerifyLoansOverdue.verifyLoansOverdue;
->>>>>>> calculator
