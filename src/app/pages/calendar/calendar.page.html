@@ -1,4 +1,43 @@
 <app-toolbar [title]="'Calendario'"></app-toolbar>
 <ion-content padding>
+    <ion-row>
+        <ion-card color="light" class="ion-text-center w-100">
+            <ion-card-content class="font-size-17">
+              {{monthNames[actualMonth]}}
+            </ion-card-content>
+          </ion-card>
+    </ion-row>
+  <ion-row>
+    <calendar class="w-100" [eventSource]="eventSource"
+    [calendarMode]="calendar.mode"
+    [currentDate]="calendar.currentDate"
+    (onTimeSelected)="onTimeSelected($event)"
+    lockSwipes="true"
+    autoSelect="false"
+    step="30">    
+</calendar>
+  </ion-row>
   
+<div *ngIf="showEvent">
+<ion-row>
+    <ion-card color="primary" class="ion-text-center w-100">
+      <ion-card-content class="font-size-17">
+        Detalle del dia
+      </ion-card-content>
+    </ion-card>
+  </ion-row>
+  <ion-row *ngFor="let event of eventsDetail">
+    <ion-card  class="w-100">
+      <ion-card-content>
+        <ion-row>
+         <ion-text color="dark">
+             <p>Pago <b class="font-size-17">{{event.title.payback}}</b></p>
+             <p>De <b class="font-size-17">{{event.title.customer}}</b></p>
+             <p>Del prestamo de monto <b class="font-size-17">{{event.title.loanAmount}}</b></p>
+         </ion-text>
+        </ion-row>           
+      </ion-card-content>
+    </ion-card>
+  </ion-row>
+</div>
 </ion-content>

@@ -19,7 +19,6 @@ export class LoansHistoryPage implements OnInit {
   loans: Loan[];
   search;
   loanStatus: string;
-  inicialize: boolean;
 
   constructor(private fmc: FcmService,
     private modalController: ModalController, private alertController: AlertController,
@@ -28,13 +27,8 @@ export class LoansHistoryPage implements OnInit {
 
   ngOnInit() {
     this.fmc.getToken();
-    this.loanStatus = 'settled';    
-  }
-  ionViewDidEnter() {
-    if(this.inicialize) {
-    this.loadLoans();
-    }
-    this.inicialize = true;
+    this.loanStatus = 'settled';  
+    this.loadLoans()  
   }
 
   async loadLoans() {

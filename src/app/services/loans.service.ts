@@ -21,6 +21,12 @@ export class LoansService {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
         .where('overdue', '==', false)
       };
+      if (filter == 'allActive') {
+        query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
+      };
+      if (filter == 'all') {
+        query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', 'in', ['active', 'settled'])
+      };
       if (filter == 'overdue') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('overdue', '==', true)
         .where('status', '==', 'active')

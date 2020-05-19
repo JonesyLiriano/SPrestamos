@@ -21,7 +21,6 @@ export class LoansDisplayPage implements OnInit {
   loans: Loan[];
   search;
   loanStatus: string;
-  inicialize: boolean;
 
   constructor(private fmc: FcmService,
     private modalController: ModalController, private alertController: AlertController,
@@ -33,14 +32,7 @@ export class LoansDisplayPage implements OnInit {
     this.loanStatus = 'overdue';
     this.loadLoans();
     
-  }
-  ionViewDidEnter() {
-    if(this.inicialize) {   
-    this.loadLoans();
-    }
-    this.inicialize = true;    
-  }
-  
+  } 
 
   async loadLoans() {
     await this.loadingService.presentLoading('Cargando...');
