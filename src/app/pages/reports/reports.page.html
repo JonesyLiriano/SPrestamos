@@ -1,37 +1,59 @@
 <app-toolbar [title]="'Reportes'"></app-toolbar>
 <ion-content>
-    <ion-card color="primary" class="ion-text-center w-100">
+  <ion-grid>
+    <ion-row>
+      <ion-card color="primary" class="ion-text-center w-100">
         <ion-card-content class="font-size-17">
-          <p>Informe Mensual</p>   
+          <p>Informe Mensual</p>
         </ion-card-content>
-      </ion-card>    
-        <ion-card>
-          <ion-card-header>
-            <ion-card-subtitle><p class="ion-text-end">Cantidad de prestamos</p></ion-card-subtitle>
-            <ion-card-title><p class="ion-text-end">{{customersMonthAmount}}</p></ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p>Prestado: {{totalLoansAmount | currency}}</p>        
-            <p>Intereses Generados:</p>
-            <p>Intereses Por Cobrar:</p>
-            <p>Interes Cobrados:</p>
-          </ion-card-content>
-        </ion-card>  
-        <ion-card color="primary" class="ion-text-center w-100">
-            <ion-card-content class="font-size-17">
-              <p>Informe Total</p>   
-            </ion-card-content>
-          </ion-card>    
-            <ion-card>
-              <ion-card-header>
-                <ion-card-subtitle><p class="ion-text-end">Cantidad de clientes</p></ion-card-subtitle>
-                <ion-card-title><p class="ion-text-end">#cliente</p></ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Prestado:</p>        
-                <p>Intereses:</p>
-                <p>Ganancias neta:</p>
-              </ion-card-content>
-            </ion-card>  
-        
+      </ion-card>
+      <ion-card class="w-100">
+        <ion-card-header>
+          <ion-card-subtitle>
+            <p class="ion-text-start">Cantidad de prestamos</p>
+          </ion-card-subtitle>
+          <ion-card-title>
+            <p class="ion-text-start">{{customersMonthAmount}}</p>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col size="12">  
+              <p class="ion-text-end">Prestado: {{monthLoansAmount | currency}}</p>            
+              <p class="ion-text-end">Intereses Generados: {{cuotesMonthAmount | currency}}</p>
+              <p class="ion-text-end">Intereses Por Cobrar: {{pendingCuotesMonthAmount | currency}}</p>
+              <p class="ion-text-end">Intereses Cobrados: {{cuotesPaidMonthAmount | currency}}</p> 
+            </ion-col>          
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+    <ion-row>
+      <ion-card color="primary" class="ion-text-center w-100">
+        <ion-card-content class="font-size-17">
+          <p>Informe Total</p>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="w-100">
+        <ion-card-header>
+          <ion-card-subtitle>
+            <p class="ion-text-start">Cantidad de prestamos</p>
+          </ion-card-subtitle>
+          <ion-card-title>
+            <p class="ion-text-start">{{customersTotalAmount}}</p>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col size="12">  
+              <p class="ion-text-end">Prestado: {{totalLoansAmount | currency}}</p>            
+              <p class="ion-text-end">Intereses Generados: {{cuotesTotalAmount | currency}}</p>
+              <p class="ion-text-end">Intereses Por Cobrar: {{pendingCuotesTotalAmount | currency}}</p>
+              <p class="ion-text-end">Intereses Cobrados: {{cuotesPaidTotalAmount | currency}}</p> 
+            </ion-col>          
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </ion-grid>
 </ion-content>

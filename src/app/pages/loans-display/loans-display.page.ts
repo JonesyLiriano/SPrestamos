@@ -8,6 +8,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { Storage } from '@ionic/storage';
 import { PaymentModalPage } from '../payment-modal/payment-modal.page';
 import { delay } from 'q';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-loans-display',
@@ -21,6 +22,7 @@ export class LoansDisplayPage implements OnInit {
   loans: Loan[];
   search;
   loanStatus: string;
+  subscription: Subscription;
 
   constructor(private fmc: FcmService,
     private modalController: ModalController, private alertController: AlertController,
@@ -37,7 +39,11 @@ export class LoansDisplayPage implements OnInit {
   async loadLoans() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300);
-    this.loansService.getLoans(this.loanStatus).subscribe(data => {
+    if (this.subscription != undefined) {
+      this.subscription.unsubscribe();
+    }
+    this.subscription = this.loansService.getLoans(this.loanStatus).subscribe(data => {
+      console.log(this.loanStatus);
       this.loans = data;
       this.loadingService.dismissLoading();
     }, err => {

@@ -6,6 +6,7 @@ import { LoansService } from 'src/app/services/loans.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { LoanReadModalPage } from '../loan-read-modal/loan-read-modal.page';
 import { delay } from 'q';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-loans-history',
@@ -19,6 +20,7 @@ export class LoansHistoryPage implements OnInit {
   loans: Loan[];
   search;
   loanStatus: string;
+  subscription: Subscription;
 
   constructor(private fmc: FcmService,
     private modalController: ModalController, private alertController: AlertController,
@@ -34,7 +36,10 @@ export class LoansHistoryPage implements OnInit {
   async loadLoans() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300);
-    this.loansService.getLoans(this.loanStatus).subscribe(data => {
+    if (this.subscription != undefined) {
+      this.subscription.unsubscribe();
+    }
+    this.subscription = this.loansService.getLoans(this.loanStatus).subscribe(data => {
       this.loans = data;
       this.loadingService.dismissLoading();
     }, err => {

@@ -46,16 +46,18 @@ export const verifyLoansOverdue = functions.pubsub.schedule('5 11 * * *').timeZo
               } else if (payment.type == 'Capital') {
                 capital += payment.amount;
               }
-            });
+             });
           let interesAmount = generateCuote(paymentsCollection, doc.data().loanAmount
           , doc.data().interestRate, interes, capital);
 
-          changeLoanStatus(loansRef,doc.id, doc.data());
-          db.collection("usersDevices").where('userId', '==', doc.data().uid).get()
+          await changeLoanStatus(loansRef,doc.id, doc.data());
+          return db.collection("usersDevices").where('userId', '==', doc.data().uid).get()
           .then((usersDevicesSnapshot: any): void => {
-            usersDevicesSnapshot.forEach((userDevice: any): void => {              
-              sendPushNotification(interesAmount, userDevice.data().token, doc.data(), doc.id);
+            usersDevicesSnapshot.forEach(async (userDevice: any): Promise<void> => {              
+             sendPushNotification(interesAmount, userDevice.data().token, doc.data(), doc.id);
             });
+          }).catch((error: any) => {
+            console.log('error2: ' + error);
           });
         }
       } catch(e) {
@@ -130,9 +132,9 @@ function generateCuote(loanPayment: any,loanAmount: number | undefined, interesR
 
 }
 
-function changeLoanStatus(loan: any, id: string, data: any): void {
+async function changeLoanStatus(loan: any, id: string, data: any): Promise<void> {
   data.overdue = true;
-  loan.doc(id).update(data);
+ await loan.doc(id).update(data);
 }
 
 async function sendPushNotification(amountInteres: number, userToken: string, loan: Loan, doc: string) {
@@ -157,6 +159,8 @@ async function sendPushNotification(amountInteres: number, userToken: string, lo
     notification_foreground: "true"
     }
   };  
-  await admin.messaging().sendToDevice(userToken, payload);
+  return admin.messaging().sendToDevice(userToken, payload).then().catch((error: any) => {
+    console.log('error mensaje: ' + error); });
+
 
 }
