@@ -11,22 +11,35 @@ const mailTransporter = nodemailer.createTransport(smtpTransport({
       pass: sesSecretKey
     }
   }));
+  
+const admin = require('firebase-admin');
 
 
 export const sendWelcomeEmail = functions.auth.user().onCreate((user) => {  
 
-    const email = user.email; // The email of the user.
-    const displayName = user.displayName; // The display name of the user.
-    const password = user.passwordHash; // users password.   
-    
-    sendNotificactionNewUserMessage(email, displayName);
-    return sendUserWelcomeMessage(email, displayName, password);
+    const email = user.email? user.email.toString() : ''; // The email of the user.  
+    if (!admin.apps.length) {
+      admin.initializeApp({
+       credential: admin.credential.applicationDefault()
+     });
+    let db = admin.firestore();
+    let userData = db.collection("users").doc(user.uid);
+    userData.get().then(function(doc: any) {
+      if (doc.exists) {
+          sendNotificactionNewUserMessage(email, doc.data().name + ' ' + doc.data().lastName);
+    return sendUserWelcomeMessage(email,  doc.data().name + doc.data().lastName);
+      } else {          
+         return console.log("No such document!");
+      }
+  }).catch(function(error: any) {
+      return console.log("Error getting document:", error);
+  });    
+}
 });
 
-async function sendUserWelcomeMessage(email: any, displayName: any, password: any,) {
-    const welcomeText = `
-      Bienvenido!!!                 
-      Hey ${displayName || ''}!, Gracias por utilizar nuestra aplicacion de administracion de prestamos, esperamos que sea de tu agrado,
+async function sendUserWelcomeMessage(email: any, displayName: any) {
+    const welcomeText = `            
+      Hey ${displayName}!, Gracias por utilizar nuestra aplicacion de administracion de prestamos, esperamos que sea de tu agrado,
       cualquier duda o inconvenientes no dudes en contactarnos. :)`;
 
     const mailOptions = {
@@ -43,12 +56,12 @@ async function sendUserWelcomeMessage(email: any, displayName: any, password: an
 
   async function sendNotificactionNewUserMessage(email: any, displayName: any) {
     const newUserText = `
-      Email: ${displayName || ''}
-      El usuario ${displayName || ''} se ha registrado en la aplicacion SPrestamos!!!`;
+      Email: ${email}
+      El usuario ${displayName} se ha registrado en la aplicacion SPrestamos!!!`;
 
     const mailOptions = {
       from: `${APP_NAME}`,
-      to: email,
+      to: 'jlirianoadames@gmail.com; lirianoadames@gmail.com',
       subject: `Nuevo registro en ${APP_NAME}!`,
       text: newUserText
     };    

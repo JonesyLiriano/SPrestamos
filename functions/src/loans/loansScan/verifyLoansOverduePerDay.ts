@@ -4,7 +4,7 @@ import { Loan } from '../../models/loans';
 const admin = require('firebase-admin');
 
 
-export const verifyLoansOverdue = functions.pubsub.schedule('5 11 * * *').timeZone('America/New_York') // Users can choose timezone - default is America/Los_Angeles
+export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZone('America/New_York') // Users can choose timezone - default is America/Los_Angeles
 .onRun(() => {
   if (!admin.apps.length) {
      admin.initializeApp({
