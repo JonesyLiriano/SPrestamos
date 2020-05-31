@@ -159,7 +159,7 @@ export class PaymentModalPage implements OnInit {
       this.interesPayments.forEach(payment => {
         this.cuotesPendingAmount += payment.amount;
       });
-      this.loanInteres.setValue(this.cuotesPendingAmount);
+      this.loanInteres.setValue(this.cuotesPendingAmount.toFixed(2));
     }
   }
 

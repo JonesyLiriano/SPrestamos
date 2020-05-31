@@ -101,8 +101,8 @@ export class LoanReadModalPage implements OnInit {
       Math.max.apply(null, this.payments.filter(x => x.paid == true).map(function (o) { return new Date(o.logDate) })) : this.loan.initialDate).toISOString();
       this.lastPaymentDate.setValue(this.lastPayment);
       this.overdues.setValue(this.payments.filter(x => x.paid == false && x.type == 'Interes').length);
-      this.pendingAmountInput.setValue(this.pendingAmount);
-      this.cuote.setValue(this.pendingAmount * (this.loan.interestRate/100));
+      this.pendingAmountInput.setValue(this.pendingAmount.toFixed(2));
+      this.cuote.setValue((this.pendingAmount * (this.loan.interestRate/100)).toFixed(2));
     });
   }
 
