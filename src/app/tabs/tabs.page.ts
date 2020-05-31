@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Loan } from '../models/loan';
 import { PaymentModalPage } from '../pages/payment-modal/payment-modal.page';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tabs',
@@ -18,10 +19,10 @@ export class TabsPage {
               private loadingService: LoadingService, private authService: AuthService,
               private router: Router, private modalController: ModalController) {
     this.fcmService.getToken();
-    this.fcmService.listenToNotifications().subscribe((data: any) => {
+    this.fcmService.listenToNotifications().subscribe(async (data: any) => {
       if(data.tap == 'background'){
-        this.router.navigate(['tabs/loans-display']);  
-        this.presentPaymentModal({
+        await this.router.navigate(['tabs/loans-display']);  
+        await this.presentPaymentModal({
           idDoc: data.idDoc,
           initialDate: data.initialDate,
           customerId: data.customerId,
@@ -59,12 +60,17 @@ export class TabsPage {
         }, {
           text: 'Cerrar Sesion',
           handler: async () => {
-            await this.loadingService.presentLoading('Cargando...');            
+            try {
+            await this.loadingService.presentLoading('Cargando...');    
             await this.authService.signOut();
             this.loadingService.dismissLoading();
             this.router.navigate(['/login']);
           }
+          catch(error) {            
+            this.loadingService.dismissLoading();
+          }
         }
+      }
       ]
     });
 

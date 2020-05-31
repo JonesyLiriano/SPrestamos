@@ -6,6 +6,7 @@ import { Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
 import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { FcmService } from 'src/app/services/fcm.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginPage implements OnInit {
   public showPassword: boolean;
   constructor(private authService: AuthService, private router: Router,
               public menuCtrl: MenuController, private fb: FormBuilder,
-              private loadingService: LoadingService, private toastService: ToastService) {
+              private loadingService: LoadingService, private toastService: ToastService,
+              private usersService: UsersService) {
   }
   ngOnInit() {
     this.menuCtrl.enable(false);
@@ -40,11 +42,13 @@ export class LoginPage implements OnInit {
       if (this.loginForm.valid) {
         await this.loadingService.presentLoading('Cargando...');      
         const user = await this.authService.loginUser(this.email.value, this.password.value);
+        console.log('dismiss');
         this.loadingService.dismissLoading();  
         formDirective.resetForm();
         this.loginForm.reset();   
         if (user) {
-          if(user.user.emailVerified) {  
+          if(user.user.emailVerified) { 
+            this.updateUserLog(user.user.uid);
             this.router.navigate(['/tabs/loans-display']);    
           } else {         
             this.router.navigate(['verify-email-address']);   
@@ -61,6 +65,11 @@ export class LoginPage implements OnInit {
 
   registerForm() {
     this.router.navigateByUrl('register');
+  }
+
+  async updateUserLog(uid: string) {
+    await this.usersService.updateUser(uid,{lastLoginDate: new Date().toISOString(),
+                                           emailVerified: true});
   }
 
 }

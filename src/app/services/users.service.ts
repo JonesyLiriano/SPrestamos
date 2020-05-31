@@ -17,4 +17,7 @@ export class UsersService {
   createUser(uid: string, user: User) {
     this.usersCollection.doc(uid).set(user);
   }  
+  updateUser(uid: string, user) {
+    return this.usersCollection.doc(uid).update(user);
+  }
 }

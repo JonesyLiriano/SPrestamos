@@ -1,87 +1,91 @@
 import { LoanDetails } from './../../models/loanDetails';
 import * as functions from 'firebase-functions';
-import { Loan } from '../../models/loans';
 const admin = require('firebase-admin');
 
 
 export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZone('America/New_York') // Users can choose timezone - default is America/Los_Angeles
-  .onRun(() => {
+  .onRun(async () => {
     if (!admin.apps.length) {
       admin.initializeApp({
         credential: admin.credential.applicationDefault()
       });
     }
-    let db = admin.firestore();
-    let loansRef = db.collection('loans');
-    return loansRef.where('status', '==', 'active').get()
-      .then((querySnapshot: any): void => {
-        return querySnapshot.forEach(async (doc: any) => {
-          let paymentsCollection = db.collection('loans').doc(doc.id).collection('loanDetail');
-          let payments = await paymentsCollection.get()
-            .then((snapshot: any) => {
-              return snapshot.docs.map((doc: any) => {
-                return doc.data();              
-              });
-            }).catch((error: any) => {
-              console.log(error);
-            });
-              
-            const lastPayment = new Date(Math.max.apply(null, payments.filter((x: any) => x.paid == true && x.type == 'Interes').map(function (o: any) {
-              return Number(new Date(o.logDate));
-            })).toString() != '-Infinity' ?
-              Math.max.apply(null, payments.filter((x: any) => x.paid == true && x.type == 'Interes')
-                .map(function (o: any) { return Number(new Date(o.logDate)); })) : doc.data().initialDate).toISOString();
-  
-            const lastCuote = new Date(Math.max.apply(null, payments.filter((x: any) => x.type == 'Interes')
-              .map(function (o: any) { return Number(new Date(o.logDate)); })).toString() != '-Infinity' ?
-              Math.max.apply(null, payments.filter((x: any) => x.type == 'Interes')
-                .map(function (o: any) { return Number(new Date(o.logDate)); })) : doc.data().initialDate).toISOString();
-  
-            if (overdues(doc.data().payBack, lastPayment, lastCuote)) {
-              let interes = 0;
-              let capital = 0;
-              payments.filter((x: any) => x.paid == true)
-                .forEach((payment: any) => {
-                  if (payment.type == 'Interes') {
-                    interes += payment.amount;
-                  } else if (payment.type == 'Capital') {
-                    capital += payment.amount;
-                  }
-                });
-              let interesAmount = generateCuote(paymentsCollection, doc.data().loanAmount
-                , doc.data().interestRate, interes, capital);
-  
-             changeLoanStatus(loansRef, doc.id, doc.data());
-
-            return db.collection("usersDevices").where('userId', '==', doc.data().uid).get()
-              .then((usersDevicesSnapshot: any): Promise<boolean> => {
-                usersDevicesSnapshot.forEach((userDevice: any) => {
-                  sendPushNotification(interesAmount, userDevice.data().token, doc.data(), doc.id);
-                  });
-                  return Promise.resolve(true);
-                }).catch((error: any) => {
-                  console.log('error2: ' + error);
-                  return Promise.resolve(false);
-                });
-            }
-            
-
-        });
-      }).catch((err: any) => {
-        console.log('Error getting documents', err);
+    const db = admin.firestore();
+    const loansSnapshot = await db.collection('loans').where('status', '==', 'active').get();
+    const loans = loansSnapshot.docs
+      .map((loanSnapshot: any) => {
+        const data = loanSnapshot.data();
+        const idDoc = loanSnapshot.id;
+        return { idDoc, ...data };
       });
+    const promises: any[] = [];
+    loans.forEach(async (loan: any) => {
+      try {
+        const paymentsSnapshot = await db.collection('loans').doc(loan.idDoc).collection('loanDetail').get();
+        const payments = paymentsSnapshot.docs
+          .map((paymentSnapshot: any) => {
+            const data = paymentSnapshot.data();
+            const idDoc = paymentSnapshot.id;
+            return { idDoc, ...data };
+          });
+        const lastPayment = new Date(Math.max.apply(null, payments.filter((x: any) => x.paid == true && x.type == 'Interes')
+          .map(function (o: any) { return Number(new Date(o.logDate)); })).toString() != '-Infinity' ?
+          Math.max.apply(null, payments.filter((x: any) => x.paid == true && x.type == 'Interes')
+            .map(function (o: any) { return Number(new Date(o.logDate)); })) : loan.initialDate).toISOString();
+
+        const lastCuote = new Date(Math.max.apply(null, payments.filter((x: any) => x.type == 'Interes')
+          .map(function (o: any) { return Number(new Date(o.logDate)); })).toString() != '-Infinity' ?
+          Math.max.apply(null, payments.filter((x: any) => x.type == 'Interes')
+            .map(function (o: any) { return Number(new Date(o.logDate)); })) : loan.initialDate).toISOString();
+
+        if (overdues(loan.payBack, lastPayment, lastCuote)) {
+          let capital = 0;
+          payments.filter((x: any) => x.paid == true)
+            .forEach((payment: any) => {
+              if (payment.type == 'Capital') {
+                capital += payment.amount;
+              }
+            });
+
+          let newCuotes = generateCuote(db, loan, capital);
+          let updateLoanStatus = changeLoanStatus(db, loan);
+          promises.push([updateLoanStatus, newCuotes]);
+        };
+        return Promise.all(promises).then(() => {
+          return true;
+        }).catch(er => {
+          console.error('...', er);
+        });;
+      }
+      catch (error) {
+        console.log(error);
+        return Promise.reject(true);
+      }
+    });
   });
 
+function formatDates(date: Date): Date {
+  let yyyy = date.getFullYear().toString();
+  let dd = date.getDate().toString();
+  let mm = (date.getMonth() + 1).toString();
+  if (dd.length < 10) {
+    dd = '0' + dd;
+
+  }
+  if (mm.length < 10) {
+    mm = '0' + mm;
+  }
+  return new Date(Number.parseInt(yyyy), Number.parseInt(mm), Number.parseInt(dd));
+}
 
 function overdues(payback: string | undefined, lastPayment: string, lastCuote: string): boolean {
-  const today = new Date();
-  const paymentDiff = Math.abs(today.getTime() - new Date(lastPayment).getTime());
-  const cuoteDiff = Math.abs(today.getTime() - new Date(lastCuote).getTime());
-  const paymentDayDiff = (paymentDiff / (1000 * 3600 * 24));
-  const paymentMonthDiff = (paymentDiff / (86400000 * 30));
-  const cuoteDayDiff = (cuoteDiff / (1000 * 3600 * 24));
-  const cuoteMonthDiff = (cuoteDiff / (86400000 * 30));
-
+  const today = formatDates(new Date());
+  const paymentDiff = Math.abs(today.getTime() - formatDates(new Date(lastPayment)).getTime());
+  const cuoteDiff = Math.abs(today.getTime() - formatDates(new Date(lastCuote)).getTime());
+  const paymentDayDiff = (paymentDiff / (1000 * 60 * 60 * 24));
+  const paymentMonthDiff = (paymentDiff / (1000 * 60 * 60 * 24 * 7 * 4));
+  const cuoteDayDiff = (cuoteDiff / (1000 * 60 * 60 * 24));
+  const cuoteMonthDiff = (cuoteDiff / (1000 * 60 * 60 * 24 * 7 * 4));
   switch (payback) {
     case 'Por dia':
       const dia = 1;
@@ -118,59 +122,34 @@ function overdues(payback: string | undefined, lastPayment: string, lastCuote: s
   }
 }
 
-function generateCuote(loanPayment: any, loanAmount: number | undefined, interesRate: number | undefined,
-  interes: number, capital: number): number {
-  let loanDetail: LoanDetails;
-  let amountInteres = (interesRate ? interesRate / 100 : 0) * Math.abs((capital - (loanAmount ? loanAmount : 0)));
+async function generateCuote(db: any, loan: any, capital: number): Promise<number> {
 
+  let loanDetail: LoanDetails;
+  let amountInteres = (loan.interestRate ? loan.interestRate / 100 : 0) * Math.abs((capital - (loan.loanAmount ? loan.loanAmount : 0)));
   loanDetail = {
     logDate: new Date().toISOString(),
     paid: false,
     amount: amountInteres,
     type: 'Interes'
-
-  }
-  return loanPayment.add(loanDetail).then(() => {
-    return amountInteres;
-  }).catch((error: any) => {
-    console.log(error);
-    return amountInteres;
-  });
-  
-
-}
-
-function changeLoanStatus(loan: any, id: string, data: any): void {
-  data.overdue = true;
-  loan.doc(id).update(data).then().catch((error: any) => {
-    console.log(error);
-  });
-}
-
-function sendPushNotification(amountInteres: number, userToken: string, loan: Loan, doc: string) {
-  const payload = {
-    notification: {
-      title: `Nueva cuota de ${loan.customer}`,
-      body: `Se ha generado una nueva cuota con el monto de: $${amountInteres}`
-    },
-    data: {
-      idDoc: doc,
-      initialDate: loan.initialDate,
-      customerId: loan.customerId,
-      customer: loan.customer,
-      interestRate: (loan.interestRate || '').toString(),
-      loanAmount: (loan.loanAmount || '').toString(),
-      loanTerm: loan.loanTerm,
-      payBack: loan.payBack,
-      logDate: loan.logDate,
-      uid: loan.uid,
-      status: loan.status,
-      overdue: (loan.overdue || '').toString(),
-      notification_foreground: "true"
-    }
   };
-  admin.messaging().sendToDevice(userToken, payload).then().catch((error: any) => {
-    console.log('error mensaje: ' + error);
-  });
+  await db.collection("loans").doc(loan.idDoc).collection("loanDetail").add(loanDetail);
+  return amountInteres;
+}
 
+async function changeLoanStatus(db: any, loan: any) {
+  loan.overdue = true;
+  const tempLoan = {
+    initialDate: loan.initialDate,
+    customerId: loan.customerId,
+    customer: loan.customer,
+    interestRate: loan.interestRate,
+    loanAmount: loan.loanAmount,
+    loanTerm: loan.loanTerm,
+    payBack: loan.payBack,
+    logDate: loan.logDate,
+    uid: loan.uid,
+    status: loan.status,
+    overdue: loan.overdue
+  };
+  return db.collection("loans").doc(loan.idDoc).update(tempLoan);
 }

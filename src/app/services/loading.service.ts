@@ -8,14 +8,25 @@ export class LoadingService {
 
   constructor(private loadingController: LoadingController) { }
 
+  isLoading = false;
   async presentLoading(msg) {
-    const loading = await this.loadingController.create({
-      message: msg
+    return await this.loadingController.create( {
+      message: 'Cargando...'
+    }).then(a => {
+      a.present().then(() => {
+        if (!this.isLoading) {
+          a.dismiss();
+        }
+      });
     });
-    return await loading.present();
   }
 
-  dismissLoading() {
-    this.loadingController.dismiss();
+  async dismissLoading() {
+    if (this.isLoading) {
+      this.isLoading = false;
+      return await this.loadingController.dismiss();
+    }
+    return null;
   }
-}
+  }
+

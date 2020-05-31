@@ -7,6 +7,7 @@ import { LoanDetailModalPage } from '../loan-detail-modal/loan-detail-modal.page
 import { LoansService } from 'src/app/services/loans.service';
 import { LoanDetails } from 'src/app/models/loanDetails';
 import { VirtualTimeScheduler } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-loan-read-modal',
@@ -66,13 +67,14 @@ export class LoanReadModalPage implements OnInit {
   constructor(private fb: FormBuilder, private loadingService: LoadingService,
     private modalController: ModalController, private loansService: LoansService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.customer.setValue(this.loan.customer);
     this.initialDate.setValue(this.loan.initialDate);
     this.interestRate.setValue(this.loan.interestRate);
     this.loanAmount.setValue(this.loan.loanAmount);
     this.loanTerm.setValue(this.loan.loanTerm);
     this.payBack.setValue(this.loan.payBack);
+    await delay(300);
     this.getDetail();
     this.pendingAmount = 0;
   }

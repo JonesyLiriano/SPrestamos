@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { LoansService } from 'src/app/services/loans.service';
 import { Loan } from 'src/app/models/loan';
 import { LoanDetails } from 'src/app/models/loanDetails';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payment-modal',
@@ -47,11 +48,12 @@ export class PaymentModalPage implements OnInit {
     private toastService: ToastService, private loadingService: LoadingService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.pendingAmount = 0;
     this.overdues = 0;
     this.cuotesToPay = 0;
     this.paymentOptions.setValue('Interes');
+    await delay(300);
     this.getDetail();
   }
   ngAfterViewInit(): void {

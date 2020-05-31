@@ -15,29 +15,32 @@ const mailTransporter = nodemailer.createTransport(smtpTransport({
 const admin = require('firebase-admin');
 
 
-export const sendWelcomeEmail = functions.auth.user().onCreate((user) => {  
-
-    const email = user.email? user.email.toString() : ''; // The email of the user.  
+export const sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {  
+try {    
     if (!admin.apps.length) {
       admin.initializeApp({
        credential: admin.credential.applicationDefault()
      });
+    }
+    const email = user.email? user.email.toString() : ''; 
     let db = admin.firestore();
-    let userData = db.collection("users").doc(user.uid);
-    userData.get().then(function(doc: any) {
-      if (doc.exists) {
-          sendNotificactionNewUserMessage(email, doc.data().name + ' ' + doc.data().lastName);
-    return sendUserWelcomeMessage(email,  doc.data().name + doc.data().lastName);
-      } else {          
-         return console.log("No such document!");
-      }
-  }).catch(function(error: any) {
-      return console.log("Error getting document:", error);
-  });    
-}
+    let userSnapshot = await db.collection("users").doc(user.uid).get();
+    let userData = userSnapshot.data();
+    let p1 = sendNotificactionNewUserMessage(email, userData.name + ' ' + userData.lastName);
+    let p2 = sendUserWelcomeMessage(email,  userData.name + userData.lastName);
+    return Promise.all([p1,p2]).then(() => {
+      return true;
+    }).catch(er => {
+      console.error('...', er);
+    });;
+    }
+    catch (error) {
+      console.log(error)
+      return Promise.reject(error);
+    }  
 });
 
-async function sendUserWelcomeMessage(email: any, displayName: any) {
+ function sendUserWelcomeMessage(email: any, displayName: any) {
     const welcomeText = `            
       Hey ${displayName}!, Gracias por utilizar nuestra aplicacion de administracion de prestamos, esperamos que sea de tu agrado,
       cualquier duda o inconvenientes no dudes en contactarnos. :)`;
@@ -49,12 +52,10 @@ async function sendUserWelcomeMessage(email: any, displayName: any) {
       text: welcomeText
     };    
 
-    await mailTransporter.sendMail(mailOptions);
-    console.log('New welcome email sent to:', email);
-    return null;
+    return mailTransporter.sendMail(mailOptions);
   }
 
-  async function sendNotificactionNewUserMessage(email: any, displayName: any) {
+  function sendNotificactionNewUserMessage(email: any, displayName: any) {
     const newUserText = `
       Email: ${email}
       El usuario ${displayName} se ha registrado en la aplicacion SPrestamos!!!`;
@@ -66,7 +67,5 @@ async function sendUserWelcomeMessage(email: any, displayName: any) {
       text: newUserText
     };    
 
-    await mailTransporter.sendMail(mailOptions);
-    console.log('Notificacion de nuevo usuario: ', email);
-    return null;
+    return mailTransporter.sendMail(mailOptions);    
   }
