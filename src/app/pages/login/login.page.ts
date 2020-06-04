@@ -42,7 +42,6 @@ export class LoginPage implements OnInit {
       if (this.loginForm.valid) {
         await this.loadingService.presentLoading('Cargando...');      
         const user = await this.authService.loginUser(this.email.value, this.password.value);
-        console.log('dismiss');
         this.loadingService.dismissLoading();  
         formDirective.resetForm();
         this.loginForm.reset();   

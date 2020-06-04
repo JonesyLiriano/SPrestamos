@@ -1,16 +1,15 @@
 <app-toolbar [title]="'Clientes'"></app-toolbar>
-<ion-content padding>
+<ion-content class="ion-padding">
   <app-filter (filter)="onFilter($event)"></app-filter>
-  <div>
-    <ion-virtual-scroll [items]="customers" approxItemHeight="320px">
-      <ion-item-sliding *virtualItem="let customer">
+    <ion-list class="ion-no-padding" *ngFor="let customer of customers">
+      <ion-item-sliding>
         <ion-item>
           <ion-icon name="contact" slot="start"></ion-icon>
           {{ customer.name }}
           <div class="item-note" slot="end">
             {{ customer.phone }}
           </div>
-        </ion-item>
+        </ion-item>      
         <ion-item-options side="end">
           <ion-item-option (click)="presentUpdateModal(customer)" color="primary">
             <ion-icon slot="icon-only" name="create"></ion-icon>
@@ -20,8 +19,18 @@
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
-    </ion-virtual-scroll>
-  </div>
+    </ion-list>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="infiniteEvent($event)" *ngIf="!infiniteScrolldisabled">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <ion-item color="light" *ngIf="infiniteScrolldisabled">
+    <ion-label class="ion-text-center">
+      No hay mas datos...
+    </ion-label>
+  </ion-item>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="presentAddModal()" color="tertiary">
       <ion-icon name="person-add"></ion-icon>

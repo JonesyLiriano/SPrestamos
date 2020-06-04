@@ -16,38 +16,39 @@ import { Subscription } from 'rxjs';
 export class TabsPage {
 
   constructor(private fcmService: FcmService, private alertController: AlertController,
-              private loadingService: LoadingService, private authService: AuthService,
-              private router: Router, private modalController: ModalController) {
+    private loadingService: LoadingService, private authService: AuthService,
+    private router: Router, private modalController: ModalController) {
     this.fcmService.getToken();
     this.fcmService.listenToNotifications().subscribe(async (data: any) => {
-      if(data.tap == 'background'){
-        await this.router.navigate(['tabs/loans-display']);  
-        await this.presentPaymentModal({
+      if (data.tap == 'background') {
+        await this.router.navigate(['tabs/loans-display']);
+        this.presentPaymentModal({
           idDoc: data.idDoc,
           initialDate: data.initialDate,
           customerId: data.customerId,
           customer: data.customer,
-          interestRate: data.interestRate,
-          loanAmount: data.loanAmount,
+          interestRate: parseFloat(data.interestRate),
+          loanAmount: parseFloat(data.loanAmount),
           loanTerm: data.loanTerm,
           payBack: data.payBack,
           logDate: data.logDate,
-          uid:data.uid,
+          uid: data.uid,
           status: data.status,
-          overdue: data.overdue});
-        }
-      });
-  }
+          overdue: (data.overdue.toLowerCase() === 'true')
+        });
+      }
+    });
 
+  }
   async presentPaymentModal(loan: Loan) {
     await this.loadingService.presentLoading('Cargando...');
     const modal = await this.modalController.create({
-    component: PaymentModalPage,
-    componentProps: {loan}
-  });
+      component: PaymentModalPage,
+      componentProps: { loan }
+    });
     await modal.present();
   }
-  
+
   async logOut() {
     const alert = await this.alertController.create({
       header: 'Confirmacion!',
@@ -61,22 +62,22 @@ export class TabsPage {
           text: 'Cerrar Sesion',
           handler: async () => {
             try {
-            await this.loadingService.presentLoading('Cargando...');    
-            await this.authService.signOut();
-            this.loadingService.dismissLoading();
-            this.router.navigate(['/login']);
-          }
-          catch(error) {            
-            this.loadingService.dismissLoading();
+              await this.loadingService.presentLoading('Cargando...');
+              await this.authService.signOut();
+              this.loadingService.dismissLoading();
+              this.router.navigate(['/login']);
+            }
+            catch (error) {
+              this.loadingService.dismissLoading();
+            }
           }
         }
-      }
       ]
     });
 
     await alert.present();
   }
 
-  
+
 
 }

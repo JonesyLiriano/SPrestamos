@@ -9,17 +9,27 @@ import { LoanDetails } from '../models/loanDetails';
   providedIn: 'root'
 })
 export class LoansService {
+
   loansCollection: AngularFirestoreCollection<Loan>;
+  limit = 10;
+  public nextQueryAfter;
   constructor(private afs: AngularFirestore, private authService: AuthService) {
     this.loansCollection = this.afs.collection<Loan>('loans');
   }
 
-  getLoans(filter: string) {
+  getLoans(filter: string, search: string) {
     return this.afs.collection<Loan>('loans', ref => {
       let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
       if (filter == 'active') {
+        if (this.nextQueryAfter) {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
-        .where('overdue', '==', false)
+        .where('overdue', '==', false).orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff")
+        .startAfter(this.nextQueryAfter).limit(this.limit)
+        } else {
+          query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
+          .where('overdue', '==', false).orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff")
+          .limit(this.limit)
+        }
       };
       if (filter == 'allActive') {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'active')
@@ -28,20 +38,42 @@ export class LoansService {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', 'in', ['active', 'settled'])
       };
       if (filter == 'overdue') {
+        if (this.nextQueryAfter) {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('overdue', '==', true)
-        .where('status', '==', 'active')
+        .where('status', '==', 'active').orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff")
+        .startAfter(this.nextQueryAfter).limit(this.limit)
+        } else {
+          query = query.where('uid', '==', this.authService.userAuthData.uid).where('overdue', '==', true)
+        .where('status', '==', 'active').orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff")
+        .limit(this.limit)
+        }
       };
       if (filter == 'settled') {
+        if (this.nextQueryAfter) {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'settled')
+        .orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff").startAfter(this.nextQueryAfter)
+        .limit(this.limit)
+        } else {
+          query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'settled')
+          .orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff").limit(this.limit)
+        }
       };
       if (filter == 'cancelled') {
+        if (this.nextQueryAfter) {
         query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'cancelled')
+        .orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff").startAfter(this.nextQueryAfter)
+        .limit(this.limit)
+        } else {
+          query = query.where('uid', '==', this.authService.userAuthData.uid).where('status', '==', 'cancelled')
+        .orderBy('customer').orderBy('loanAmount', 'desc').startAt(search).endAt(search+ "\uf8ff").limit(this.limit)
+        }
       };
       return query;
     }).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Loan;
         const idDoc = a.payload.doc.id;
+        this.nextQueryAfter = a.payload.doc; 
         return { idDoc, ...data };
       }))
     );
@@ -52,7 +84,6 @@ export class LoansService {
   }
 
   addLoanDetails(loanId: string, loanDetails: LoanDetails) {
-    console.log('payment');
     return this.loansCollection.doc(loanId).collection('loanDetail').add(loanDetails);
   }
 

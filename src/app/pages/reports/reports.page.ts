@@ -50,7 +50,7 @@ export class ReportsPage implements OnInit {
   async loadLoans() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300);
-    this.loansService.getLoans('all').subscribe(data => {
+    this.loansService.getLoans('all', '').subscribe(data => {
       this.calculateReports(data);
       this.loadingService.dismissLoading();
     }, err => {

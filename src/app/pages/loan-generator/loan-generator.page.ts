@@ -80,7 +80,7 @@ inicializeDates() {
   async loadCustomers() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300); 
-    this.customersService.getCustomers().subscribe(data => {
+    this.customersService.getCustomers('').subscribe(data => {
       this.customers = data;
       this.loadingService.dismissLoading();
     }, err => {

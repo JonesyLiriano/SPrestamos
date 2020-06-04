@@ -9,7 +9,8 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
       admin.initializeApp({
         credential: admin.credential.applicationDefault()
       });
-    }
+    }    
+    let promises: any[] = [];
     const db = admin.firestore();
     const loansSnapshot = await db.collection('loans').where('status', '==', 'active').get();
     const loans = loansSnapshot.docs
@@ -18,9 +19,7 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
         const idDoc = loanSnapshot.id;
         return { idDoc, ...data };
       });
-    const promises: any[] = [];
-    loans.forEach(async (loan: any) => {
-      try {
+   await loans.map(async (loan: any) => {      
         const paymentsSnapshot = await db.collection('loans').doc(loan.idDoc).collection('loanDetail').get();
         const payments = paymentsSnapshot.docs
           .map((paymentSnapshot: any) => {
@@ -39,7 +38,7 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
             .map(function (o: any) { return Number(new Date(o.logDate)); })) : loan.initialDate).toISOString();
 
         if (overdues(loan.payBack, lastPayment, lastCuote)) {
-          let capital = 0;
+        let capital = 0;
           payments.filter((x: any) => x.paid == true)
             .forEach((payment: any) => {
               if (payment.type == 'Capital') {
@@ -49,39 +48,20 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
 
           let newCuotes = generateCuote(db, loan, capital);
           let updateLoanStatus = changeLoanStatus(db, loan);
-          promises.push([updateLoanStatus, newCuotes]);
-        };
-        return Promise.all(promises).then(() => {
-          return true;
-        }).catch(er => {
-          console.error('...', er);
-        });;
-      }
-      catch (error) {
-        console.log(error);
-        return Promise.reject(true);
-      }
+          promises.push(updateLoanStatus, newCuotes);
+        }; 
     });
+    return Promise.all(promises).then(() => {
+      return true;
+    }).catch(er => {
+    return Promise.reject(er);
+    });     
   });
 
-function formatDates(date: Date): Date {
-  let yyyy = date.getFullYear().toString();
-  let dd = date.getDate().toString();
-  let mm = (date.getMonth() + 1).toString();
-  if (dd.length < 10) {
-    dd = '0' + dd;
-
-  }
-  if (mm.length < 10) {
-    mm = '0' + mm;
-  }
-  return new Date(Number.parseInt(yyyy), Number.parseInt(mm), Number.parseInt(dd));
-}
-
 function overdues(payback: string | undefined, lastPayment: string, lastCuote: string): boolean {
-  const today = formatDates(new Date());
-  const paymentDiff = Math.abs(today.getTime() - formatDates(new Date(lastPayment)).getTime());
-  const cuoteDiff = Math.abs(today.getTime() - formatDates(new Date(lastCuote)).getTime());
+  const today = new Date(new Date().setHours(0,0,0,0));
+  const paymentDiff = Math.abs(today.getTime() - new Date(new Date(lastPayment).setHours(0,0,0,0)).getTime());
+  const cuoteDiff = Math.abs(today.getTime() - new Date(new Date(lastCuote).setHours(0,0,0,0)).getTime());
   const paymentDayDiff = (paymentDiff / (1000 * 60 * 60 * 24));
   const paymentMonthDiff = (paymentDiff / (1000 * 60 * 60 * 24 * 7 * 4));
   const cuoteDayDiff = (cuoteDiff / (1000 * 60 * 60 * 24));
@@ -132,7 +112,7 @@ async function generateCuote(db: any, loan: any, capital: number): Promise<numbe
     amount: amountInteres,
     type: 'Interes'
   };
-  await db.collection("loans").doc(loan.idDoc).collection("loanDetail").add(loanDetail);
+  db.collection("loans").doc(loan.idDoc).collection("loanDetail").add(loanDetail);
   return amountInteres;
 }
 

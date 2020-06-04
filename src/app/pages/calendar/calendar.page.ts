@@ -37,7 +37,7 @@ export class CalendarPage implements OnInit {
   async loadLoans() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300);
-    this.loansService.getLoans('allActive').subscribe(data => {
+    this.loansService.getLoans('allActive', '').subscribe(data => {
       this.loans = data;
       this.loadEvents();
       this.loadingService.dismissLoading();

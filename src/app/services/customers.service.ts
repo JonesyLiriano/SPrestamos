@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Customer } from '../models/customer';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
-import { delay } from 'q';
-
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +10,39 @@ import { delay } from 'q';
 export class CustomersService {
 
   customersCollection: AngularFirestoreCollection<Customer>;
+  limit = 10;
+  public nextQueryAfter;
+
   constructor(private authService: AuthService, private afs: AngularFirestore) {
     this.customersCollection = this.afs.collection<Customer>('customers');
   }
 
-  getCustomers() {
+  getCustomers(filter) {
+    if (this.nextQueryAfter) {
     return this.afs.collection<Customer>('customers', ref => ref.where(
-      'uid', '==', this.authService.userAuthData.uid)).snapshotChanges().pipe(
+      'uid', '==', this.authService.userAuthData.uid).orderBy('name')
+      .startAt(filter).endAt(filter+ "\uf8ff").startAfter(this.nextQueryAfter).limit(this.limit))
+      .snapshotChanges().pipe( 
         map(actions => actions.map(a => {
           const data = a.payload.doc.data() as Customer;
           const idDoc = a.payload.doc.id;
+          this.nextQueryAfter = a.payload.doc;          
           return { idDoc, ...data };
         }))
       );
+    } else {
+      return this.afs.collection<Customer>('customers', ref => ref.where(
+        'uid', '==', this.authService.userAuthData.uid).orderBy('name')
+        .startAt(filter).endAt(filter+ "\uf8ff").limit(this.limit))
+        .snapshotChanges().pipe( 
+          map(actions => actions.map(a => {
+            const data = a.payload.doc.data() as Customer;
+            const idDoc = a.payload.doc.id;
+            this.nextQueryAfter = a.payload.doc;          
+            return { idDoc, ...data };
+          }))
+        );
+    }
   }
 
   createCustomer(customer: Customer) {

@@ -27,11 +27,12 @@ try {
     let userSnapshot = await db.collection("users").doc(user.uid).get();
     let userData = userSnapshot.data();
     let p1 = sendNotificactionNewUserMessage(email, userData.name + ' ' + userData.lastName);
-    let p2 = sendUserWelcomeMessage(email,  userData.name + userData.lastName);
+    let p2 = sendUserWelcomeMessage(email,  userData.name + ' ' + userData.lastName);
     return Promise.all([p1,p2]).then(() => {
       return true;
     }).catch(er => {
-      console.error('...', er);
+      console.log(er);
+      return false;
     });;
     }
     catch (error) {
@@ -58,7 +59,7 @@ try {
   function sendNotificactionNewUserMessage(email: any, displayName: any) {
     const newUserText = `
       Email: ${email}
-      El usuario ${displayName} se ha registrado en la aplicacion SPrestamos!!!`;
+      El usuario ${displayName} se ha registrado en la aplicacion SPrestamos!`;
 
     const mailOptions = {
       from: `${APP_NAME}`,

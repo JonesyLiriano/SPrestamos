@@ -12,7 +12,6 @@ import { CustomerUpdateReadModalPage } from '../customer-update-read-modal/custo
 import { CustomerAddModalPage } from '../customer-add-modal/customer-add-modal.page';
 import { CustomerUpdateReadModalPageModule } from '../customer-update-read-modal/customer-update-read-modal.module';
 import { CustomerAddModalPageModule } from '../customer-add-modal/customer-add-modal.module';
-import { SearchCustomersPipe } from 'src/app/pipes/search-customers.pipe';
 
 const routes: Routes = [
   {
@@ -32,7 +31,7 @@ const routes: Routes = [
     CustomerUpdateReadModalPageModule,
     CustomerAddModalPageModule
   ],
-  declarations: [CustomersPage, SearchCustomersPipe],
+  declarations: [CustomersPage],
   entryComponents: [CustomerUpdateReadModalPage, CustomerAddModalPage]
 })
 export class CustomersPageModule {}

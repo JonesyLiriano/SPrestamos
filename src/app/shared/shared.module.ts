@@ -4,11 +4,10 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import {IonicModule} from '@ionic/angular';
 import {FilterComponent} from './components/filter/filter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SearchLoansPipe } from '../pipes/search-loans.pipe';
 
 
 @NgModule({
-  declarations: [ToolbarComponent, FilterComponent, SearchLoansPipe],
+  declarations: [ToolbarComponent, FilterComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -18,8 +17,7 @@ import { SearchLoansPipe } from '../pipes/search-loans.pipe';
   exports: [
     ToolbarComponent,
     FilterComponent,
-    ReactiveFormsModule,
-    SearchLoansPipe
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }
