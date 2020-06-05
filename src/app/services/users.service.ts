@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ export class UsersService {
 
   constructor(private afs: AngularFirestore) {
     this.usersCollection = this.afs.collection<User>('users');
+   }
+
+   getUser(uid: string) {
+    return this.usersCollection.doc(uid).get().toPromise();
    }
 
   createUser(uid: string, user: User) {

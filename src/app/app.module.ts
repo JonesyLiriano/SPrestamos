@@ -16,6 +16,7 @@ import {FileTransfer} from '@ionic-native/file-transfer/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { AdMob } from "@admob-plus/ionic";
 
 
 
@@ -34,6 +35,7 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
     File,
     FileTransfer,
     FirebaseX,
+    AdMob,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

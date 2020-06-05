@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { Loan } from '../models/loan';
 import { PaymentModalPage } from '../pages/payment-modal/payment-modal.page';
 import { Subscription } from 'rxjs';
+import { AdmobService } from '../services/admob.service';
+import { UsersService } from '../services/users.service';
+import { PopoverService } from '../services/popover.service';
 
 @Component({
   selector: 'app-tabs',
@@ -17,7 +20,10 @@ export class TabsPage {
 
   constructor(private fcmService: FcmService, private alertController: AlertController,
     private loadingService: LoadingService, private authService: AuthService,
-    private router: Router, private modalController: ModalController) {
+    private router: Router, private modalController: ModalController,
+    private adMobService: AdmobService, private usersService: UsersService,
+    private popoverService: PopoverService) {
+
     this.fcmService.getToken();
     this.fcmService.listenToNotifications().subscribe(async (data: any) => {
       if (data.tap == 'background') {
@@ -38,8 +44,22 @@ export class TabsPage {
         });
       }
     });
+    this.presentAdmobBanner();
+    this.presentPaymentButton();
 
   }
+
+  async presentAdmobBanner() {
+    await this.adMobService.showAdmobBanner();
+  }
+
+  async presentPaymentButton() {
+    const user = await this.usersService.getUser(this.authService.userAuthData.uid);
+    if (!user.data().emailVerfied) {
+      await this.popoverService.presentPopover();
+    }
+  }
+
   async presentPaymentModal(loan: Loan) {
     await this.loadingService.presentLoading('Cargando...');
     const modal = await this.modalController.create({

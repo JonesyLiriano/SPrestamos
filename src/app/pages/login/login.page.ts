@@ -67,8 +67,7 @@ export class LoginPage implements OnInit {
   }
 
   async updateUserLog(uid: string) {
-    await this.usersService.updateUser(uid,{lastLoginDate: new Date().toISOString(),
-                                           emailVerified: true});
+    await this.usersService.updateUser(uid,{lastLoginDate: new Date().toISOString()});
   }
 
 }
