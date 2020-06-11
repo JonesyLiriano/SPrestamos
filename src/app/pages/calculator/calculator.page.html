@@ -1,5 +1,6 @@
 <app-toolbar [title]="'Calculadora'"></app-toolbar>
-<ion-content padding>
+<ion-content class="ion-padding">
+  <app-payment-card-button *ngIf=!verifiedUser [loansLeft]="limitLoans"></app-payment-card-button>
   <form [formGroup]="calculatorForm" (ngSubmit)="onSubmit()">
     <ion-grid>
       <ion-row>

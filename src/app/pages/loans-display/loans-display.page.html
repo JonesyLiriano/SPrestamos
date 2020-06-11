@@ -1,5 +1,6 @@
 <app-toolbar [title]="'Prestamos'"></app-toolbar>
 <ion-content class="ion-padding">
+  <app-payment-card-button *ngIf=!verifiedUser [loansLeft]="limitLoans"></app-payment-card-button>
   <app-filter (filter)="onFilter($event)"></app-filter>
   <ion-list class="ion-no-padding">
     <ion-list-header>Filtrado</ion-list-header>

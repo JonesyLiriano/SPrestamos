@@ -1,0 +1,27 @@
+<ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-row>
+        <ion-col>
+          <b>
+            <ion-text color="danger">
+              Prestamos activos disponibles: {{limitLoans}}
+            </ion-text>
+          </b>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-text-right">
+        <ion-col class="custom-col ion-align-items-center h-100" size="8">
+          <span>
+            Desbloquea todas las funcionalidades por tan solo:
+          </span>
+        </ion-col>
+        <ion-col class="custom-col" size="4">
+          <ion-button color="success" expand="block" (click)="presentPaymentModal()">
+            <ion-icon slot="start" name="cash"></ion-icon>$20
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-row>
+  </ion-grid>
+</ion-card>

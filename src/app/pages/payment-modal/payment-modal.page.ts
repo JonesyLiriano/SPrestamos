@@ -48,15 +48,15 @@ export class PaymentModalPage implements OnInit {
     private toastService: ToastService, private loadingService: LoadingService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.pendingAmount = 0;
     this.overdues = 0;
     this.cuotesToPay = 0;
     this.paymentOptions.setValue('Interes');
+  }
+  async ngAfterViewInit(): Promise<void> {
     await delay(300);
     this.getDetail();
-  }
-  ngAfterViewInit(): void {
     this.loadingService.dismissLoading();
   }
   async onSubmit() {
@@ -169,6 +169,7 @@ export class PaymentModalPage implements OnInit {
 
   getDetail() {
     return this.loansService.getLoanDetail(this.loan.idDoc).subscribe(data => {
+      this.pendingAmount = 0;
       this.payments = data;
       this.payments.filter(x => x.type == 'Capital' && x.paid == true).forEach(payment => {
         this.pendingAmount += (payment['amount']);

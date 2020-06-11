@@ -1,5 +1,6 @@
 <app-toolbar [title]="'Reportes'"></app-toolbar>
-<ion-content>
+<ion-content class="ion-padding">
+  <app-payment-card-button *ngIf=!verifiedUser [loansLeft]="limitLoans"></app-payment-card-button>
   <ion-grid>
     <ion-row>
       <ion-card color="primary" class="ion-text-center w-100">

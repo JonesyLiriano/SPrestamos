@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Loan } from 'src/app/models/loan';
-import { FcmService } from 'src/app/services/fcm.service';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { LoansService } from 'src/app/services/loans.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { LoanReadModalPage } from '../loan-read-modal/loan-read-modal.page';
 import { delay } from 'q';
 import { Subscription } from 'rxjs';
+import { VerifiedUserService } from 'src/app/services/verified-user.service';
 
 @Component({
   selector: 'app-loans-history',
@@ -27,17 +27,23 @@ export class LoansHistoryPage implements OnInit, AfterViewInit {
   completeCancelledLoad = false;
   lastSettledLoan;
   lastCancelledLoan;
+  verifiedUser = true;
+  limitLoans = 0;
 
-  constructor(private fmc: FcmService,
-    private modalController: ModalController, private alertController: AlertController,
+  constructor(private modalController: ModalController,
     private loansService: LoansService,
-    private loadingService: LoadingService) { }
+    private loadingService: LoadingService, private verifiedUserService: VerifiedUserService) { }
 
   async ngOnInit() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300);
-    this.fmc.getToken();
     this.loanStatus = 'settled';
+    this.verifiedUserService.verifiedUser$.subscribe(show => {
+      this.verifiedUser = show;
+    });
+    this.verifiedUserService.loansLimit$.subscribe(show => {      
+      this.limitLoans = show;
+    });
   }
   
   ngAfterViewInit() {

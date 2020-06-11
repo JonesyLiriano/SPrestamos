@@ -1,5 +1,6 @@
 <app-toolbar [title]="'Calendario'"></app-toolbar>
-<ion-content padding>
+<ion-content class="ion-padding">
+  <app-payment-card-button *ngIf=!verifiedUser [loansLeft]="limitLoans"></app-payment-card-button>
     <ion-row>
         <ion-card color="light" class="ion-text-center w-100">
             <ion-card-content class="font-size-17">

@@ -5,6 +5,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { delay } from 'rxjs/operators';
 import { CalendarComponent } from "ionic2-calendar/calendar";
 import { formatCurrency } from '@angular/common';
+import { VerifiedUserService } from 'src/app/services/verified-user.service';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.page.html',
@@ -26,12 +27,21 @@ export class CalendarPage implements OnInit {
   loans: Loan[];
   showEvent: boolean;
   eventsDetail = [];
-  constructor(private loansService: LoansService, private loadingService: LoadingService) { }
+  verifiedUser = true;
+  limitLoans = 0;
+  constructor(private loansService: LoansService, private loadingService: LoadingService,
+    private verifiedUserService: VerifiedUserService) { }
 
   ngOnInit() {
     this.actualMonth = new Date().getMonth();
     this.actualYear = new Date().getFullYear();
     this.loadLoans();
+    this.verifiedUserService.verifiedUser$.subscribe(show => {
+      this.verifiedUser = show;
+    });
+    this.verifiedUserService.loansLimit$.subscribe(show => {
+      this.limitLoans = show;
+    });
   }
 
   async loadLoans() {

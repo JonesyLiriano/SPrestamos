@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { FcmService } from '../services/fcm.service';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { LoadingService } from '../services/loading.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Loan } from '../models/loan';
 import { PaymentModalPage } from '../pages/payment-modal/payment-modal.page';
-import { Subscription } from 'rxjs';
-import { AdmobService } from '../services/admob.service';
 import { UsersService } from '../services/users.service';
-import { PopoverService } from '../services/popover.service';
+import { VerifiedUserService } from '../services/verified-user.service';
+import { LoansService } from '../services/loans.service';
 
 @Component({
   selector: 'app-tabs',
@@ -20,9 +19,8 @@ export class TabsPage {
 
   constructor(private fcmService: FcmService, private alertController: AlertController,
     private loadingService: LoadingService, private authService: AuthService,
-    private router: Router, private modalController: ModalController,
-    private adMobService: AdmobService, private usersService: UsersService,
-    private popoverService: PopoverService) {
+    private router: Router, private modalController: ModalController, private usersService: UsersService,
+    private verifiedUserService: VerifiedUserService, private loansService: LoansService) {
 
     this.fcmService.getToken();
     this.fcmService.listenToNotifications().subscribe(async (data: any) => {
@@ -43,22 +41,10 @@ export class TabsPage {
           overdue: (data.overdue.toLowerCase() === 'true')
         });
       }
-    });
-    this.presentAdmobBanner();
-    this.presentPaymentButton();
-
+    }); 
+    this.getUserInfo();
   }
-
-  async presentAdmobBanner() {
-    await this.adMobService.showAdmobBanner();
-  }
-
-  async presentPaymentButton() {
-    const user = await this.usersService.getUser(this.authService.userAuthData.uid);
-    if (!user.data().emailVerfied) {
-      await this.popoverService.presentPopover();
-    }
-  }
+  
 
   async presentPaymentModal(loan: Loan) {
     await this.loadingService.presentLoading('Cargando...');
@@ -68,6 +54,31 @@ export class TabsPage {
     });
     await modal.present();
   }
+
+
+
+  async getUserInfo(){
+    try {
+      const user = await this.usersService.getUser(this.authService.userAuthData.uid);
+      if (!user.data().emailVerified) {
+        this.verifiedUserService.setVerifiedUserState(false);
+        this.currentLoansActive();
+      } else {
+        this.verifiedUserService.setVerifiedUserState(true);
+      }
+    }
+    catch(err) {
+      console.log('PaymentButton ERROR: ' + err)
+    }
+  }
+
+  async currentLoansActive() {
+      this.loansService.getLoans('allActive', '').subscribe(data => {
+        this.verifiedUserService.setLoansLimit(data.length);
+      }, err => {
+        console.log(err);
+      });
+    }  
 
   async logOut() {
     const alert = await this.alertController.create({

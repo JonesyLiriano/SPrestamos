@@ -9,6 +9,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { delay } from 'q';
 import { Subscription } from 'rxjs';
 import { ToastService } from 'src/app/services/toast.service';
+import { VerifiedUserService } from 'src/app/services/verified-user.service';
 
 @Component({
   selector: 'app-customers',
@@ -22,15 +23,24 @@ export class CustomersPage implements OnInit, AfterViewInit {
   search = '';
   infiniteScrolldisabled;
   subscriptionCustomers: Subscription;
+  verifiedUser = true;
+  limitLoans = 0;
 
   constructor(private modalController: ModalController, private alertController: AlertController,
     private customersService: CustomersService, private storage: Storage,
-    private loadingService: LoadingService, private toastService: ToastService) { }
+    private loadingService: LoadingService, private toastService: ToastService,
+    private verifiedUserService: VerifiedUserService) { }
 
   async ngOnInit() {
     await this.loadingService.presentLoading('Cargando...');
     await delay(300);
     this.loadCustomers();
+    this.verifiedUserService.verifiedUser$.subscribe(show => {
+      this.verifiedUser = show;
+    });
+    this.verifiedUserService.loansLimit$.subscribe(show => {
+      this.limitLoans = show;
+    });
   }
 
   ngAfterViewInit() {
@@ -80,6 +90,7 @@ export class CustomersPage implements OnInit, AfterViewInit {
             await this.loadingService.presentLoading('Cargando...');
             await this.customersService.deleteCustomer(customer);
             this.customers = this.customers.filter((doc) => doc.idDoc !== customer.idDoc);
+            this.customersService.allCustomerLoaded = false;
             this.loadingService.dismissLoading();
           }
         }

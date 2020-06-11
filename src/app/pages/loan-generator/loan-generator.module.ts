@@ -5,11 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { LoanGeneratorPage } from './loan-generator.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { IonicSelectableModule } from 'ionic-selectable';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoanGeneratorPage
+    component: LoanGeneratorPage,
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -19,7 +22,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    IonicSelectableModule 
   ],
   declarations: [LoanGeneratorPage]
 })

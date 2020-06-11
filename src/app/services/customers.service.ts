@@ -10,14 +10,16 @@ import { map } from 'rxjs/operators'
 export class CustomersService {
 
   customersCollection: AngularFirestoreCollection<Customer>;
-  limit = 10;
+  limit = 15;
   public nextQueryAfter;
+  allCustomerLoaded = false;
 
   constructor(private authService: AuthService, private afs: AngularFirestore) {
     this.customersCollection = this.afs.collection<Customer>('customers');
   }
 
   getCustomers(filter) {
+    console.log('custoemr');
     if (this.nextQueryAfter) {
     return this.afs.collection<Customer>('customers', ref => ref.where(
       'uid', '==', this.authService.userAuthData.uid).orderBy('name')

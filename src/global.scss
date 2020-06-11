@@ -61,3 +61,12 @@
 .custom-margin-top-1 {
   margin-top: 21px;
 }
+
+.custom-popover .popover-content {
+  width: 70%;
+  top: 0px;
+  position: relative;
+}
+.custom-col {
+  display: flex;
+}

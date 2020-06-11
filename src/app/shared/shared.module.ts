@@ -4,10 +4,11 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import {IonicModule} from '@ionic/angular';
 import {FilterComponent} from './components/filter/filter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { PaymentCardButtonComponent } from './components/payment-card-button/payment-card-button.component';
 
 
 @NgModule({
-  declarations: [ToolbarComponent, FilterComponent],
+  declarations: [ToolbarComponent, FilterComponent, PaymentCardButtonComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -17,7 +18,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
   exports: [
     ToolbarComponent,
     FilterComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PaymentCardButtonComponent
   ]
 })
 export class SharedModule { }

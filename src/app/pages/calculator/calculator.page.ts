@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { ToastService } from 'src/app/services/toast.service';
 import { formatCurrency } from '@angular/common';
+import { VerifiedUserService } from 'src/app/services/verified-user.service';
 
 @Component({
   selector: 'app-calculator',
@@ -42,9 +43,12 @@ export class CalculatorPage implements OnInit {
   get totalInteresAmount() {
     return this.calculatorForm.get('totalInteresAmount');
   }
+  verifiedUser = true;
+  limitLoans = 0;
 
 
-  constructor(private fb: FormBuilder, private toastService: ToastService) {
+  constructor(private fb: FormBuilder, private toastService: ToastService,
+    private verifiedUserService: VerifiedUserService) {
 
   }
 
@@ -56,6 +60,12 @@ export class CalculatorPage implements OnInit {
       'Mensual',
       'Trimestral'
     ];
+    this.verifiedUserService.verifiedUser$.subscribe(show => {
+      this.verifiedUser = show;
+    });
+    this.verifiedUserService.loansLimit$.subscribe(show => {
+      this.limitLoans = show;
+    });
   }
 
   onSubmit() {

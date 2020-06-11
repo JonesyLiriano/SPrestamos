@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy, IonApp } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -16,7 +16,6 @@ import {FileTransfer} from '@ionic-native/file-transfer/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
-import { AdMob } from "@admob-plus/ionic";
 
 
 
@@ -35,7 +34,6 @@ import { AdMob } from "@admob-plus/ionic";
     File,
     FileTransfer,
     FirebaseX,
-    AdMob,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -77,6 +77,7 @@ export class CustomerAddModalPage implements OnInit, AfterViewInit {
               handler: async () => {
                 await this.loadingService.presentLoading('Cargando...');
                 await this.customersService.createCustomer(this.setCustomer());
+                this.customersService.allCustomerLoaded = false;
                 this.loadingService.dismissLoading(); 
                 this.toastService.presentSuccessToast('Cliente registrado correctamente!');
                 this.dismissModal();

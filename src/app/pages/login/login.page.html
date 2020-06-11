@@ -15,19 +15,23 @@
             <form [formGroup]="loginForm" #formDirective="ngForm" (ngSubmit)="onClickSubmit(formDirective)"
             (keyup.enter)= "onClickSubmit(formDirective)">
               <div>
-                <ion-item>
+                <ion-item class="ion-item-custom">
                   <ion-label position="floating">Email</ion-label>
                   <ion-input formControlName="email" type="email" clearInput required autocapitalize="on"></ion-input>
                   <ion-icon class="custom-margin-top-1" name="person" slot="start"></ion-icon>
                 </ion-item>
-                <ion-item>
+                <ion-item class="ion-item-custom">
                   <ion-label position="floating">Password</ion-label>
                   <ion-input formControlName="password" [type]="showPassword? 'text' : 'password'" clearInput required>
                   </ion-input>
                   <ion-icon class="custom-margin-top-1" name="lock" slot="start"></ion-icon>
                   <ion-icon *ngIf="password.value" [name]="showPassword? 'eye-off' : 'eye'" slot="end"
                     (click)="showPassword = !showPassword"></ion-icon>
-                </ion-item>                
+                </ion-item> 
+                <ion-item class="item item-trns">
+                  <ion-label>Recuerdame</ion-label>
+                  <ion-checkbox color="primary" formControlName="rememberMe" slot="start"></ion-checkbox>
+                </ion-item>            
               </div>
               <div class="ion-padding-top ion-text-center">
                 <ion-button class="ion-margin-bottom" type="submit" [disabled]="!loginForm.valid" expand="block" color="tertiary">

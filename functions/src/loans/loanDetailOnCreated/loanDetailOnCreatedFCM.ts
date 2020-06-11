@@ -23,11 +23,12 @@ export const loanDetailOnCreated = functions.firestore.document('/loans/{loanId}
                     map((uDevicesSnapshot: any) => {
                         const data = uDevicesSnapshot.data();
                         const idDoc = uDevicesSnapshot.id;
+                        console.log('device: ' + idDoc + ' ' + data );
                         return { idDoc, ...data };
                     });
 
                 usersDevices.forEach((userDevice: any) => {
-                    const pushNotification = sendPushNotification(snapshot.data()!.amount, userDevice.token, loan);
+                    const pushNotification = sendPushNotification(snapshot.data()!.amount, userDevice.token, loan, loanId);
                     promises.push([pushNotification]);
                 });
 
@@ -46,14 +47,14 @@ export const loanDetailOnCreated = functions.firestore.document('/loans/{loanId}
         }
     });
 
-async function sendPushNotification(amountInteres: number, userToken: string, loan: Loan) {
+async function sendPushNotification(amountInteres: number, userToken: string, loan: Loan, idDoc: string) {
     const payload = {
         notification: {
             title: `Nueva cuota de ${loan.customer}`,
             body: `Se ha generado una nueva cuota con el monto de: $${amountInteres.toFixed(2)}`
         },
         data: {
-            idDoc: (loan.idDoc || '').toString(),
+            idDoc: idDoc,
             initialDate: loan.initialDate,
             customerId: loan.customerId,
             customer: loan.customer,

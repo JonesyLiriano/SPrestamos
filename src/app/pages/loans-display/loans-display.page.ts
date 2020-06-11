@@ -9,6 +9,8 @@ import { Storage } from '@ionic/storage';
 import { PaymentModalPage } from '../payment-modal/payment-modal.page';
 import { delay } from 'q';
 import { Subscription } from 'rxjs';
+import { VerifiedUserService } from 'src/app/services/verified-user.service';
+import { AdmobService } from 'src/app/services/admob.service';
 
 @Component({
   selector: 'app-loans-display',
@@ -30,18 +32,25 @@ export class LoansDisplayPage implements OnInit, AfterViewInit {
   completeActiveLoad = false;
   lastOverdueLoan;
   lastActiveLoan;
-
+  verifiedUser = true;
+  limitLoans = 0;
 
   constructor(private fmc: FcmService,
     private modalController: ModalController, private alertController: AlertController,
     private loansService: LoansService, private storage: Storage,
-    private loadingService: LoadingService) { }
+    private loadingService: LoadingService, private verifiedUserService: VerifiedUserService,
+    private admob: AdmobService) { }
 
   async ngOnInit() {
-    await this.loadingService.presentLoading('Cargando...');
-    await delay(300);
     this.fmc.getToken();
+    await delay(300);
     this.loanStatus = 'overdue';
+    this.verifiedUserService.verifiedUser$.subscribe(show => {
+      this.verifiedUser = show;
+    });
+    this.verifiedUserService.loansLimit$.subscribe(show => {
+      this.limitLoans = show;
+    });
   }
 
   ngAfterViewInit() {
@@ -71,7 +80,6 @@ export class LoansDisplayPage implements OnInit, AfterViewInit {
   getLoansActive() {
     this.lastActiveLoan = this.loansService.nextQueryAfter;
     this.subscriptionLoansActive = this.loansService.getLoans(this.loanStatus, this.search).subscribe(loans => {
-      console.log('active');
       if (loans.length < this.loansService.limit) {
         this.completeActiveLoad = true;
       } else {
@@ -100,7 +108,6 @@ export class LoansDisplayPage implements OnInit, AfterViewInit {
   getLoansOverdue() {
     this.lastOverdueLoan = this.loansService.nextQueryAfter;
     this.subscriptionLoansOverdue = this.loansService.getLoans(this.loanStatus, this.search).subscribe(loans => {
-      console.log('overdue');
       this.lastOverdueLoan = this.loansService.nextQueryAfter;
       if (loans.length < this.loansService.limit) {
         this.completeOverdueLoad = true;

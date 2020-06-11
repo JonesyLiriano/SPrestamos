@@ -9,11 +9,13 @@ import { LoansHistoryPage } from './loans-history.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LoanReadModalPageModule } from '../loan-read-modal/loan-read-modal.module';
 import { LoanReadModalPage } from '../loan-read-modal/loan-read-modal.page';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoansHistoryPage
+    component: LoansHistoryPage,
+    canActivate: [AuthGuard]
   }
 ];
 

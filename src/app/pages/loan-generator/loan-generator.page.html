@@ -3,14 +3,33 @@
   <form [formGroup]="loanForm" (ngSubmit)="onSubmit()">
     <ion-grid>
       <ion-row>
-        <ion-item class="w-100">
+        <ion-item class="w-100 ion-no-padding">
           <ion-icon slot="start" name="person"></ion-icon>
           <ion-label>Cliente</ion-label>
-          <ion-select name="customer" placeholder="Cliente" formControlName="customer" required>
+          <!-- <ion-select name="customer" placeholder="Cliente" formControlName="customer" required>
             <ion-select-option *ngFor="let customer of customers" [value]="customer">
               {{customer.name}}
             </ion-select-option>
-          </ion-select>
+          </ion-select> -->
+          <ionic-selectable item-content #customerComponent [(ngModel)]="customerModel" itemValueField="name" itemTextField="name"
+            [items]="customers" [canSearch]="true" [hasInfiniteScroll]="true" (onSearch)="onFilter($event)"
+            (onInfiniteScroll)="loadCustomers($event)" [ngModelOptions]="{standalone: true}" [searchDebounce]="1000">
+            <ng-template ionicSelectableSearchFailTemplate>
+              <div class="ion-padding">
+                No se encontraron clientes...
+              </div>
+            </ng-template>
+            <ng-template ionicSelectableHeaderTemplate>
+              <ion-header translucent>
+              <ion-toolbar color="tertiary">                
+                  <ion-buttons slot="end" >
+                    <ion-button (click)="customerComponent.close()">Cerrar</ion-button>
+                  </ion-buttons>              
+                <ion-title>Buscar Cliente</ion-title>
+              </ion-toolbar>
+              </ion-header>
+            </ng-template>
+          </ionic-selectable>
         </ion-item>
       </ion-row>
       <ion-row>
@@ -39,7 +58,8 @@
         <ion-item class="w-100">
           <ion-label>Inicio Prestamo</ion-label>
           <ion-icon name="calendar" slot="start"></ion-icon>
-          <ion-datetime formControlName="initialDate" min="1990-01-01" [max]="loanTerm.value" displayFormat="DDD. MMM DD, YY" required>
+          <ion-datetime formControlName="initialDate" min="1990-01-01" [max]="loanTerm.value"
+            displayFormat="DDD. MMM DD, YY" required>
           </ion-datetime>
         </ion-item>
       </ion-row>
@@ -47,8 +67,9 @@
         <ion-item class="w-100">
           <ion-label>Final Prestamo</ion-label>
           <ion-icon name="calendar" slot="start"></ion-icon>
-          <ion-datetime formControlName="loanTerm" [min]="initialDate.value" [max]="maxDate" displayFormat="DDD. MMM DD, YY" required>
-            
+          <ion-datetime formControlName="loanTerm" [min]="initialDate.value" [max]="maxDate"
+            displayFormat="DDD. MMM DD, YY" required>
+
           </ion-datetime>
         </ion-item>
       </ion-row>

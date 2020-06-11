@@ -5,6 +5,7 @@ import { delay } from 'rxjs/operators';
 import { Loan } from 'src/app/models/loan';
 import { formatCurrency } from '@angular/common';
 import { LoanDetails } from 'src/app/models/loanDetails';
+import { VerifiedUserService } from 'src/app/services/verified-user.service';
 
 @Component({
   selector: 'app-reports',
@@ -26,7 +27,10 @@ export class ReportsPage implements OnInit {
   cuotesTotalAmount: number;
   pendingCuotesTotalAmount: number;
   cuotesPaidTotalAmount: number;
-  constructor(private loansService: LoansService, private loadingService: LoadingService) { }
+  verifiedUser: boolean;
+  limitLoans = 0;
+  constructor(private loansService: LoansService, private loadingService: LoadingService,
+    private verifiedUserService: VerifiedUserService) { }
 
   ngOnInit() {
     this.monthLoansAmount = 0;
@@ -44,6 +48,12 @@ export class ReportsPage implements OnInit {
     this.actualMonth = this.today.getMonth();
     this.actualYear = this.today.getFullYear();
     this.loadLoans();
+    this.verifiedUserService.verifiedUser$.subscribe(show => {
+      this.verifiedUser = show;
+    });
+    this.verifiedUserService.loansLimit$.subscribe(show => {
+      this.limitLoans = show;
+    });
 
   }
 
