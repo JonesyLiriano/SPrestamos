@@ -93,7 +93,7 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-button expand="block" color="tertiary" type="submit" [disabled]="loanForm.invalid">
+          <ion-button expand="block" color="tertiary" type="submit" [disabled]="loanForm.invalid || customerModel == undefined">
             Generar Prestamo
           </ion-button>
         </ion-col>

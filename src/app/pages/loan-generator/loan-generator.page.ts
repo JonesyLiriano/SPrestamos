@@ -23,8 +23,7 @@ export class LoanGeneratorPage implements OnInit {
   verifiedUser = true;
   limitLoans = 0;
 
-  loanForm = this.fb.group({
-    customer: ['', Validators.required],
+  loanForm = this.fb.group({    
     initialDate: ['', Validators.required],
     interestRate: ['', Validators.required],
     loanAmount: ['', Validators.required],
@@ -174,6 +173,7 @@ export class LoanGeneratorPage implements OnInit {
                 this.setLoan();
                 await this.loansService.createLoan(this.loan);
                 this.loanForm.reset();
+                this.customerModel = undefined;
                 this.inicializeDates();
                 this.toastService.presentSuccessToast('Prestamo registrado correctamente!');
                 this.loadingService.dismissLoading();
