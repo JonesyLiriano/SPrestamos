@@ -9,7 +9,7 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
       admin.initializeApp({
         credential: admin.credential.applicationDefault()
       });
-    }    
+    } 
     let promises: any[] = [];
     const db = admin.firestore();
     const loansSnapshot = await db.collection('loans').where('status', '==', 'active').get();
@@ -36,7 +36,7 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
           .map(function (o: any) { return Number(new Date(o.logDate)); })).toString() != '-Infinity' ?
           Math.max.apply(null, payments.filter((x: any) => x.type == 'Interes')
             .map(function (o: any) { return Number(new Date(o.logDate)); })) : loan.initialDate).toISOString();
-
+         
         if (overdues(loan.payBack, lastPayment, lastCuote)) {
         let capital = 0;
           payments.filter((x: any) => x.paid == true)
@@ -45,10 +45,10 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
                 capital += payment.amount;
               }
             });
-
-          let newCuotes = generateCuote(db, loan, capital);
-          let updateLoanStatus = changeLoanStatus(db, loan);
-          promises.push(updateLoanStatus, newCuotes);
+          let amountInteres = (loan.interestRate ? loan.interestRate / 100 : 0) * Math.abs((capital - (loan.loanAmount ? loan.loanAmount : 0)));
+          let generateCuoteStatus = generateCuote(db, loan.idDoc, amountInteres);
+          let updateLoanStatus = changeLoanStatus(db, loan);                   
+          promises.push(updateLoanStatus, generateCuoteStatus);
         }; 
     });
     return Promise.all(promises).then(() => {
@@ -102,18 +102,16 @@ function overdues(payback: string | undefined, lastPayment: string, lastCuote: s
   }
 }
 
-async function generateCuote(db: any, loan: any, capital: number): Promise<number> {
+async function generateCuote(db: any, idDoc: string, amountInteres: number): Promise<number> {
 
-  let loanDetail: LoanDetails;
-  let amountInteres = (loan.interestRate ? loan.interestRate / 100 : 0) * Math.abs((capital - (loan.loanAmount ? loan.loanAmount : 0)));
+  let loanDetail: LoanDetails;  
   loanDetail = {
     logDate: new Date().toISOString(),
     paid: false,
     amount: amountInteres,
     type: 'Interes'
   };
-  db.collection("loans").doc(loan.idDoc).collection("loanDetail").add(loanDetail);
-  return amountInteres;
+  return db.collection("loans").doc(idDoc).collection("loanDetail").add(loanDetail);  
 }
 
 async function changeLoanStatus(db: any, loan: any) {
