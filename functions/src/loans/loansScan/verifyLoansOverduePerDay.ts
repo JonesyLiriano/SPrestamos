@@ -102,7 +102,7 @@ function overdues(payback: string | undefined, lastPayment: string, lastCuote: s
   }
 }
 
-async function generateCuote(db: any, idDoc: string, amountInteres: number): Promise<number> {
+async function generateCuote(db: any, idDoc: string, amountInteres: number) {
 
   let loanDetail: LoanDetails;  
   loanDetail = {
@@ -111,7 +111,7 @@ async function generateCuote(db: any, idDoc: string, amountInteres: number): Pro
     amount: amountInteres,
     type: 'Interes'
   };
-  return db.collection("loans").doc(idDoc).collection("loanDetail").add(loanDetail);  
+  return await db.collection("loans").doc(idDoc).collection("loanDetail").add(loanDetail);  
 }
 
 async function changeLoanStatus(db: any, loan: any) {
@@ -129,5 +129,5 @@ async function changeLoanStatus(db: any, loan: any) {
     status: loan.status,
     overdue: loan.overdue
   };
-  return db.collection("loans").doc(loan.idDoc).update(tempLoan);
+  return await db.collection("loans").doc(loan.idDoc).update(tempLoan);
 }
