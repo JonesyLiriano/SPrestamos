@@ -9,15 +9,12 @@ if (!admin.apps.length) {
 }
 export const loanDetailOnCreated = functions.firestore.document('/loans/{loanId}/loanDetail/{loanDetailId}')
     .onCreate(async (snapshot, context) => {
-
-        try {
+        const promises: any[] = [];
             if (snapshot.data()!.type == 'Interes') {
                 const db = admin.firestore();
-                const loanId = context.params.loanId;
-                const promises: any[] = [];
+                const loanId = context.params.loanId;                
                 const loanSnapshot = await db.collection('loans').doc(loanId).get();
                 const loan = loanSnapshot.data();
-
                 const usersDevicesSnapshot = await db.collection("usersDevices").where('userId', '==', loan.uid).get();
                 const usersDevices = usersDevicesSnapshot.docs.
                     map((uDevicesSnapshot: any) => {
@@ -30,21 +27,9 @@ export const loanDetailOnCreated = functions.firestore.document('/loans/{loanId}
                 usersDevices.forEach((userDevice: any) => {
                     const pushNotification = sendPushNotification(snapshot.data()!.amount, userDevice.token, loan, loanId);
                     promises.push([pushNotification]);
-                });
-
-                return Promise.resolve(promises).then(() => {
-                    return true;
-                }).catch(er => {
-                    console.error('...', er);
-                });;
-            } else {
-                return Promise.reject(true);
-            }
-        }
-        catch (error) {
-            console.log(error);
-            return Promise.reject(error);
-        }
+                });                   
+            }  
+            return Promise.all(promises);   
     });
 
 async function sendPushNotification(amountInteres: number, userToken: string, loan: Loan, idDoc: string) {

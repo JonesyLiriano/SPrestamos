@@ -15,8 +15,7 @@ const mailTransporter = nodemailer.createTransport(smtpTransport({
 const admin = require('firebase-admin');
 
 
-export const sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {  
-try {    
+export const sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {    
     if (!admin.apps.length) {
       admin.initializeApp({
        credential: admin.credential.applicationDefault()
@@ -28,17 +27,7 @@ try {
     let userData = userSnapshot.data();
     let p1 = sendNotificactionNewUserMessage(email, userData.name + ' ' + userData.lastName);
     let p2 = sendUserWelcomeMessage(email,  userData.name + ' ' + userData.lastName);
-    return Promise.all([p1,p2]).then(() => {
-      return true;
-    }).catch(er => {
-      console.log(er);
-      return false;
-    });;
-    }
-    catch (error) {
-      console.log(error)
-      return Promise.reject(error);
-    }  
+    return Promise.all([p1,p2]);     
 });
 
  function sendUserWelcomeMessage(email: any, displayName: any) {

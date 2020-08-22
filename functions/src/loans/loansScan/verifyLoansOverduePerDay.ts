@@ -47,15 +47,12 @@ export const verifyLoansOverdue = functions.pubsub.schedule('0 5 * * *').timeZon
             });
           let amountInteres = (loan.interestRate ? loan.interestRate / 100 : 0) * Math.abs((capital - (loan.loanAmount ? loan.loanAmount : 0)));
           let generateCuoteStatus = generateCuote(db, loan.idDoc, amountInteres);
-          let updateLoanStatus = changeLoanStatus(db, loan);                   
-          promises.push(updateLoanStatus, generateCuoteStatus);
-        }; 
+          let updateLoanStatus = changeLoanStatus(db, loan);                          
+          promises.push(generateCuoteStatus);
+          promises.push(updateLoanStatus);   
+        };
     });
-    return Promise.all(promises).then(() => {
-      return true;
-    }).catch(er => {
-    return Promise.reject(er);
-    });     
+    return Promise.all(promises);     
   });
 
 function overdues(payback: string | undefined, lastPayment: string, lastCuote: string): boolean {
